@@ -16,12 +16,13 @@ jobs:
 
       - name: Create deployment archive
         run: |
-          tar -czf deploy.tar.gz \
+          ARCHIVE_PATH="$RUNNER_TEMP/deploy.tar.gz"
+          tar -czf "$ARCHIVE_PATH" \
             --exclude=node_modules \
             --exclude=.git \
             --exclude=.github \
-            --exclude=deploy.tar.gz \
             .
+          echo "ARCHIVE_PATH=$ARCHIVE_PATH" >> "$GITHUB_ENV"
 
       - name: Prepare SSH key
         env:
@@ -39,7 +40,7 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
-          scp -P "$SSH_PORT" deploy.tar.gz "$SSH_USER@$SSH_HOST:/home/minhhoa2/deploy.tar.gz"
+          scp -P "$SSH_PORT" "$ARCHIVE_PATH" "$SSH_USER@$SSH_HOST:/home/minhhoa2/deploy.tar.gz"
 
       - name: Deploy on server
         env:
