@@ -47,15 +47,37 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
+          CPANEL_NODE_PREFIX: ${{ secrets.CPANEL_NODE_PREFIX }}
         run: |
           ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" <<'EOF'
           set -euo pipefail
           ARCHIVE="/home/minhhoa2/deploy.tar.gz"
           TARGET="/home/minhhoa2/minhhoang"
           STAGING="/home/minhhoa2/.deploy_tmp"
-          NODE_PREFIX="/home/minhhoa2/nodevenv/minhhoang/18"
-          NODE_VENV="$NODE_PREFIX/bin/activate"
-          NPM_BIN="$NODE_PREFIX/bin/npm"
+          DEFAULT_NODE_PREFIXES=(
+            "/home/minhhoa2/nodevenv/minhhoang/20"
+            "/home/minhhoa2/nodevenv/minhhoang/18"
+          )
+          CANDIDATE_PREFIXES=()
+          if [ -n "${CPANEL_NODE_PREFIX:-}" ]; then
+            CANDIDATE_PREFIXES+=("$CPANEL_NODE_PREFIX")
+          fi
+          for default_prefix in "${DEFAULT_NODE_PREFIXES[@]}"; do
+            CANDIDATE_PREFIXES+=("$default_prefix")
+          done
+          NODE_PREFIX=""
+          for candidate in "${CANDIDATE_PREFIXES[@]}"; do
+            if [ -d "$candidate" ]; then
+              NODE_PREFIX="$candidate"
+              break
+            fi
+          done
+          NODE_VENV=""
+          NPM_BIN=""
+          if [ -n "$NODE_PREFIX" ]; then
+            NODE_VENV="$NODE_PREFIX/bin/activate"
+            NPM_BIN="$NODE_PREFIX/bin/npm"
+          fi
 
           rm -rf "$STAGING"
           mkdir -p "$STAGING"
@@ -67,14 +89,14 @@ jobs:
 
           rm -rf "$STAGING" "$ARCHIVE"
 
-          if [ -f "$NODE_VENV" ]; then
+          if [ -n "$NODE_VENV" ] && [ -f "$NODE_VENV" ]; then
             # Activate the cPanel-provided Node environment so npm uses the managed runtime
             . "$NODE_VENV"
-          elif [ -d "$NODE_PREFIX" ]; then
+          elif [ -n "$NODE_PREFIX" ]; then
             export PATH="$NODE_PREFIX/bin:$PATH"
             echo "Warning: activate script missing, appended \$PATH manually." >&2
           else
-            echo "Warning: Node.js virtual environment not found at \$NODE_PREFIX" >&2
+            echo "Warning: Node.js virtual environment not found. Tried: ${CANDIDATE_PREFIXES[*]}" >&2
           fi
 
           cd "$TARGET"
