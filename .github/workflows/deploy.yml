@@ -91,7 +91,9 @@ jobs:
 
           if [ -n "$NODE_VENV" ] && [ -f "$NODE_VENV" ]; then
             # Activate the cPanel-provided Node environment so npm uses the managed runtime
+            set +u
             . "$NODE_VENV"
+            set -u
           elif [ -n "$NODE_PREFIX" ]; then
             export PATH="$NODE_PREFIX/bin:$PATH"
             echo "Warning: activate script missing, appended \$PATH manually." >&2
