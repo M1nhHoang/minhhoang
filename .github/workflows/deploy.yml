@@ -53,6 +53,7 @@ jobs:
           ARCHIVE="/home/minhhoa2/deploy.tar.gz"
           TARGET="/home/minhhoa2/minhhoang"
           STAGING="/home/minhhoa2/.deploy_tmp"
+          NODE_VENV="/home/minhhoa2/nodevenv/minhhoang/18/bin/activate"
 
           rm -rf "$STAGING"
           mkdir -p "$STAGING"
@@ -63,4 +64,17 @@ jobs:
           cp -a "$STAGING"/. "$TARGET"/
 
           rm -rf "$STAGING" "$ARCHIVE"
+
+          if [ -f "$NODE_VENV" ]; then
+            # Activate the cPanel-provided Node environment so npm uses the managed runtime
+            . "$NODE_VENV"
+          fi
+
+          cd "$TARGET"
+          export NODE_ENV=production
+          npm install --production --no-audit
+          npm run --if-present build
+
+          mkdir -p tmp
+          touch tmp/restart.txt
           EOF
