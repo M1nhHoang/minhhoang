@@ -14,12 +14,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Ensure rsync is available
+      - name: Create deployment archive
         run: |
-          if ! command -v rsync >/dev/null 2>&1; then
-            sudo apt-get update
-            sudo apt-get install -y rsync
-          fi
+          tar -czf deploy.tar.gz \
+            --exclude=node_modules \
+            --exclude=.git \
+            --exclude=.github \
+            .
 
       - name: Prepare SSH key
         env:
@@ -31,16 +32,33 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p "$SSH_PORT" "$SSH_HOST" >> ~/.ssh/known_hosts
 
-      - name: Deploy via rsync
+      - name: Upload archive to server
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
-          rsync -avz --delete \
-            --exclude=node_modules \
-            --exclude=.git \
-            --exclude=.github \
-            -e "ssh -p $SSH_PORT" \
-            ./ \
-            "$SSH_USER@$SSH_HOST:/home/minhhoa2/minhhoang"
+          scp -P "$SSH_PORT" deploy.tar.gz "$SSH_USER@$SSH_HOST:/home/minhhoa2/deploy.tar.gz"
+
+      - name: Deploy on server
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" <<'EOF'
+          set -euo pipefail
+          ARCHIVE="/home/minhhoa2/deploy.tar.gz"
+          TARGET="/home/minhhoa2/minhhoang"
+          STAGING="/home/minhhoa2/.deploy_tmp"
+
+          rm -rf "$STAGING"
+          mkdir -p "$STAGING"
+          tar -xzf "$ARCHIVE" -C "$STAGING"
+
+          rm -rf "$TARGET"
+          mkdir -p "$TARGET"
+          cp -a "$STAGING"/. "$TARGET"/
+
+          rm -rf "$STAGING" "$ARCHIVE"
+          EOF
