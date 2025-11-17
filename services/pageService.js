@@ -1,14 +1,33 @@
-const dataAccessModel = require('../models/dataAccessModel');
-const db = new dataAccessModel.dataAccessModel()
+let db = null;
+const shouldUseDatabase = process.env.ENABLE_DATABASE === 'true';
+
+if (shouldUseDatabase) {
+    try {
+        const dataAccessModel = require('../models/dataAccessModel');
+        db = new dataAccessModel.dataAccessModel();
+    } catch (error) {
+        console.warn('Database connection disabled:', error.message);
+        db = null;
+    }
+}
+
+const hasDatabase = () => Boolean(db);
 
 module.exports = {
     createNewUser: async () => {
         // create random userid
-        do {
-            var userId = Math.random().toString(36).substr(2, 9);
-            var isExit = await db.execute_storedProcedure("psGetUserName", [userId]);
-        } while (isExit[0][0]);
-        
+        let userId = Math.random().toString(36).substr(2, 9);
+        if (hasDatabase()) {
+            do {
+                userId = Math.random().toString(36).substr(2, 9);
+                var isExit = await db.execute_storedProcedure("psGetUserName", [userId]);
+            } while (isExit[0][0]);
+        }
+
+        if (!hasDatabase()) {
+            return userId;
+        }
+
         // add user to database
         // get random image
         let fs = require('fs');
@@ -39,6 +58,9 @@ module.exports = {
     },
     
     isExitUser: async (userId) => {
+        if (!hasDatabase()) {
+            return true;
+        }
         return (await db.execute_storedProcedure("psGetUserName", [userId]))[0][0];
     },
     

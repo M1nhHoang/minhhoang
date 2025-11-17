@@ -1,16 +1,44 @@
-const dataAccessModel = require('../models/dataAccessModel');
-const db = new dataAccessModel.dataAccessModel()
+let db = null;
+const shouldUseDatabase = process.env.ENABLE_DATABASE === 'true';
+
+if (shouldUseDatabase) {
+    try {
+        const dataAccessModel = require('../models/dataAccessModel');
+        db = new dataAccessModel.dataAccessModel();
+    } catch (error) {
+        console.warn('Database connection disabled for chat service:', error.message);
+        db = null;
+    }
+}
+
+const hasDatabase = () => Boolean(db);
+const EMPTY_CHAT_LIST = JSON.stringify([
+    {
+        type: 'bot',
+        chatList: []
+    },
+    {
+        type: 'user',
+        chatList: []
+    }
+]);
 
 module.exports = {
     // set user to online or offline
     setStatus: async (id, status) => {
+        if (!hasDatabase()) {
+            return;
+        }
         await db.execute_storedProcedure('psSetOnlineStatus', [id, status]);
     },
     // get chat list
     getChatList: async () => {
-        bots = await db.execute_storedProcedure('psGetBots', [1]);
-        users = await db.execute_storedProcedure('psGetUserSatus', [1]);
-        
+        if (!hasDatabase()) {
+            return EMPTY_CHAT_LIST;
+        }
+        const bots = await db.execute_storedProcedure('psGetBots', [1]);
+        const users = await db.execute_storedProcedure('psGetUserSatus', [1]);
+
         // return user + bot json
         return JSON.stringify([
             {
@@ -26,9 +54,17 @@ module.exports = {
     
     // send chat list to each socket user
     sendShortMessage: async(chat, socket) => {
+        if (!hasDatabase()) {
+            const emptyShortMessage = JSON.stringify([]);
+            chat.sockets.forEach((connectedSocket) => {
+                connectedSocket.emit('server-send-usersShortMessage', emptyShortMessage);
+            });
+            return;
+        }
+
         // get list of user
-        users = await db.execute_storedProcedure('psGetUserChatList', []);
-        
+        const users = await db.execute_storedProcedure('psGetUserChatList', []);
+
         chat.sockets.forEach((connectedSocket) => {
             connectedSocket.emit('server-send-usersShortMessage', JSON.stringify(users[0].filter((user) => {
                 // // return true if pass sender or recipient else return false
@@ -57,8 +93,10 @@ module.exports = {
                 chat.sockets.forEach( async (connectedSocket) => {
                     if (connectedSocket.username === data.receiverId){
                         // insert message to database
-                        await db.execute_storedProcedure('addMessage', [data.sendId, data.receiverId, data.message]);
-                        
+                        if (hasDatabase()) {
+                            await db.execute_storedProcedure('addMessage', [data.sendId, data.receiverId, data.message]);
+                        }
+
                         // send message to client
                         connectedSocket.emit('server-send-message', JSON.stringify({
                             sender: data.sendId,
@@ -75,8 +113,12 @@ module.exports = {
     sendMassageList_whenUserTarget: async(chat, socket) => {
         socket.on('client-get-messageList', async (data) => {
             // get message list
-            messageList = await db.execute_storedProcedure('getUserMessage', [data.user, data.target]);
-            
+            if (!hasDatabase()) {
+                socket.emit("server_send_messageList", []);
+                return;
+            }
+            const messageList = await db.execute_storedProcedure('getUserMessage', [data.user, data.target]);
+
             // send to client
             socket.emit("server_send_messageList", messageList[0]);
         })
