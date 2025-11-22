@@ -38,7 +38,7 @@
               </li>
               -->
               <li class="site-nav__item site-nav__item--profile">
-                <a class="site-nav__link site-nav__link--profile" href="#login">
+                <a class="site-nav__link site-nav__link--profile" href="#login" data-view-link>
                   <img src="https://minhhoang.info/images/doglagging.png" alt="Đăng nhập đê, xem chùa à?">
                   <span>Đăng nhập</span>
                 </a>
@@ -191,14 +191,67 @@
           </div>
         </section>
         -->
-      </main>
+        
+        <section id="login" class="view" data-view>
+          <div class="auth-shell">
+            <div class="auth-hero">
+              <p class="eyebrow">Đăng nhập kiểu Việt Nam</p>
+              <h2>Thử nhập đại mật khẩu đi :D</h2>
+              <p>Không cần đăng ký hệ thống tự sinh tài khoản cho. Đời nó đơn giản thế.</p>
+              <ul class="auth-perks">
+                <li><i class="fa fa-shield"></i> Session 30 ngày (đừng hỏi mình lưu ở đâu)</li>
+                <li><i class="fa fa-lock"></i> Quên mật khẩu? Khôi phục với mật khẩu?</li>
+              </ul>
+            </div>
+
+            <div class="auth-card">
+              <div class="auth-toggle">
+                <button type="button" class="auth-tab is-active" data-auth-toggle="signin">Đăng nhập</button>
+                <button type="button" class="auth-tab" data-auth-toggle="forgot">Quên rồi thì chịu</button>
+              </div>
+
+              <form class="auth-form auth-form--signin" data-auth-form="signin" novalidate>
+                <label class="auth-field">
+                  <span>Tên đăng nhập</span>
+                  <input type="text" name="username" placeholder="Nhập tài khoản ở đây" autocomplete="username" required>
+                </label>
+                <label class="auth-field">
+                  <span>Mật khẩu</span>
+                  <input type="password" name="password" placeholder="••••••••" autocomplete="current-password" required>
+                </label>
+                <div class="auth-actions">
+                  <label class="auth-checkbox">
+                    <input type="checkbox" name="remember" checked>
+                    <span>Ghi nhớ 30 ngày (dù có thoát cũng vào lại được)</span>
+                  </label>
+                  <button type="submit">Lụm v:</button>
+                </div>
+              </form>
+
+              <form class="auth-form auth-form--forgot is-hidden" data-auth-form="forgot" novalidate>
+                <label class="auth-field">
+                  <span>Mật khẩu bạn còn nhớ</span>
+                  <input type="password" name="rememberedPassword" placeholder="Gõ mật khẩu bạn nhớ nhất" required>
+                </label>
+                <p class="auth-hint">
+                  Nhập mật khẩu bạn nhớ, thử vận may nhé :D.
+                </p>
+                <div class="auth-actions auth-actions--solo">
+                  <button type="submit">Tiếp tục</button>
+                </div>
+              </form>
+
+              <div class="auth-feedback is-hidden" role="status" aria-live="polite" data-auth-feedback></div>
+            </div>
+          </div>
+        </section>
+</main>
 
       <footer class="site-footer">
-        <p>© <span id="current-year"></span> Minh Hoàng. Build something fun.</p>
+        <p>© <span>2023</span> Minh Hoàng. Too much free time, send help.</p>
       </footer>
     </div>
 
-    <script src="socket.io/socket.io.js"></script>
     <script type="module" src="scripts/app.js"></script>
   </body>
 </html>

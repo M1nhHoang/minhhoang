@@ -83,9 +83,30 @@ jobs:
           mkdir -p "$STAGING"
           tar -xzf "$ARCHIVE" -C "$STAGING"
 
+          ENV_FILE="$TARGET/.env"
+          ENV_BACKUP="/home/minhhoa2/.env.backup"
+          LOG_DIR="$TARGET/log"
+          LOG_BACKUP="/home/minhhoa2/log.backup"
+          if [ -f "$ENV_FILE" ]; then
+            cp "$ENV_FILE" "$ENV_BACKUP"
+          fi
+          if [ -d "$LOG_DIR" ]; then
+            rm -rf "$LOG_BACKUP"
+            mv "$LOG_DIR" "$LOG_BACKUP"
+          fi
+
           rm -rf "$TARGET"
           mkdir -p "$TARGET"
           cp -a "$STAGING"/. "$TARGET"/
+
+          if [ -f "$ENV_BACKUP" ]; then
+            mv "$ENV_BACKUP" "$ENV_FILE"
+          fi
+          if [ -d "$LOG_BACKUP" ]; then
+            mkdir -p "$TARGET/log"
+            cp -a "$LOG_BACKUP"/. "$TARGET/log"/
+            rm -rf "$LOG_BACKUP"
+          fi
 
           rm -rf "$STAGING" "$ARCHIVE"
 

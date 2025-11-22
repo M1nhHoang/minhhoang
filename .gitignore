@@ -11,6 +11,7 @@ tmp/
 .env.*
 
 # logs
+log/
 logs/
 *.log
 npm-debug.log*
