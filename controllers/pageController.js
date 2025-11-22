@@ -1,4 +1,4 @@
-const { ensureVisitorSession, resolveIndexFile } = require('../services/pageService');
+const { ensureVisitorSession, getIndexHtml } = require('../services/pageService');
 
 function maybeRejectBots(req, res) {
   const userAgent = req.headers['user-agent'] || '';
@@ -29,7 +29,7 @@ async function home(req, res, next) {
     await ensureVisitorSession(req, res);
     res.set('X-Content-Type-Options', 'nosniff');
     res.set('Cache-Control', 'no-store');
-    res.sendFile(resolveIndexFile());
+    res.type('html').send(getIndexHtml());
   } catch (error) {
     next(error);
   }

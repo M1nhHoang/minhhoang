@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const fs = require('fs');
 const path = require('path');
 const {
   ensureGuestUser,
@@ -7,6 +8,9 @@ const {
 
 const ONE_MONTH = 30 * 24 * 60 * 60 * 1000;
 const SESSION_COOKIE = process.env.COOKIE_NAME || 'userId';
+const ASSET_VERSION = process.env.ASSET_VERSION || Date.now().toString(36);
+const INDEX_FILE = path.join(__dirname, '..', 'public', 'index.html');
+let cachedIndexTemplate;
 
 function buildCookieOptions() {
   const options = {
@@ -39,10 +43,19 @@ async function ensureVisitorSession(req, res) {
 }
 
 function resolveIndexFile() {
-  return path.join(__dirname, '..', 'public', 'index.html');
+  return INDEX_FILE;
+}
+
+function getIndexHtml() {
+  if (!cachedIndexTemplate) {
+    cachedIndexTemplate = fs.readFileSync(INDEX_FILE, 'utf8');
+  }
+
+  return cachedIndexTemplate.replace(/__ASSET_VERSION__/g, ASSET_VERSION);
 }
 
 module.exports = {
   ensureVisitorSession,
-  resolveIndexFile
+  resolveIndexFile,
+  getIndexHtml
 };
