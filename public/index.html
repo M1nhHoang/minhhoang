@@ -26,17 +26,6 @@
               <li class="site-nav__item">
                 <a class="site-nav__link" href="#personal-info" data-view-link>Portfolio card</a>
               </li>
-              <!--
-              <li class="site-nav__item">
-                <a class="site-nav__link" href="#personal-projects" data-view-link>Dự án</a>
-              </li>
-              <li class="site-nav__item">
-                <a class="site-nav__link" href="#chat-box" data-view-link>Chat box</a>
-              </li>
-              <li class="site-nav__item">
-                <a class="site-nav__link" href="#API" data-view-link>API</a>
-              </li>
-              -->
               <li class="site-nav__item site-nav__item--profile">
                 <a class="site-nav__link site-nav__link--profile" href="#login" data-view-link>
                   <img src="https://minhhoang.info/images/doglagging.png" alt="Đăng nhập đê, xem chùa à?">
@@ -59,11 +48,10 @@
               <h1>Yo, lạc đường à? :D</h1>
               <p>
                 Trang này tồn tại chỉ vì mình chưa nỡ để domain expire.<br>
-                Nhặt lá đá ống bơ, có gì đó sắp tới rồi đó… chắc vậy.
               </p>
               <ul class="profile-card__meta">
                 <li><i class="fa fa-map-marker"></i> Đà Nẵng, Vietnam</li>
-                <li><i class="fa fa-envelope"></i> Không có mail, fill sau v:</li>
+                <li><i class="fa fa-envelope"></i> v:</li>
                 <li></i>🙏 “Please don’t DDoS me today”</li>
               </ul>
               <div class="profile-card__social">
@@ -80,124 +68,12 @@
             </div>
           </article>
         </section>
-
-        <!--
-        <section id="personal-projects" class="view" data-view>
-          <div class="section-heading">
-            <p class="eyebrow">Dự án nổi bật</p>
-            <h2>Các dự án cá nhân</h2>
-            <p>Một vài thứ nhỏ nhỏ mình đã ship gần đây. Nội dung được cập nhật qua JavaScript để dễ mở rộng sau này.</p>
-          </div>
-          <div id="project-board" class="project-board" aria-live="polite"></div>
-        </section>
-        -->
-
-        <!--
-        <section id="chat-box" class="view" data-view aria-live="polite">
-          <div class="section-heading">
-            <p class="eyebrow">Realtime playground</p>
-            <h2>Chat box</h2>
-            <p>Socket.IO giúp mình kết nối với bạn bè, mô phỏng bot và test ý tưởng.</p>
-          </div>
-          <div class="chat-grid">
-            <aside class="chat-panel" aria-label="Danh sách cuộc trò chuyện">
-              <div class="chat-panel__header">
-                <div>
-                  <p class="chat-panel__eyebrow">Đang đăng nhập</p>
-                  <h3 class="chat-panel__title" id="chat-owner">Your Name</h3>
-                </div>
-                <button type="button" class="ghost-button" id="refresh-chat-list">
-                  Làm mới
-                </button>
-              </div>
-              <label class="field field--search">
-                <span class="sr-only">Tìm kiếm</span>
-                <i class="fa fa-search" aria-hidden="true"></i>
-                <input type="search" id="chat-search" placeholder="Tìm kiếm liên hệ..." autocomplete="off">
-              </label>
-              <div id="chat-list">
-                <div id="chat-list-items" class="chat-groups"></div>
-              </div>
-            </aside>
-
-            <div class="chat-room" id="chat">
-              <header class="chat-room__header" id="chat-target">
-                <img id="chat-target-avatar" src="https://minhhoang.info/images/meokhochuhu.png" alt="Ảnh đại diện đang trò chuyện">
-                <div>
-                  <h3 id="chat-target-name">Chọn một liên hệ</h3>
-                  <p id="chat-target-status">Chưa có cuộc trò chuyện nào được chọn.</p>
-                </div>
-              </header>
-              <div class="chat-room__messages" id="chat-messages" aria-live="polite"></div>
-              <form class="chat-room__form" id="chat-form" autocomplete="off" novalidate>
-                <label class="sr-only" for="chat-input">Tin nhắn</label>
-                <input type="text" id="chat-input" placeholder="Nhập tin nhắn..." autocomplete="off">
-                <button type="submit">Gửi</button>
-              </form>
-            </div>
-          </div>
-        </section>
-        -->
-
-        <!--
-        <section id="API" class="view" data-view>
-          <div class="section-heading">
-            <p class="eyebrow">Mini services</p>
-            <h2>Tài liệu API</h2>
-            <p>Những endpoint nhỏ dùng cho hobby project. Vẫn đang được tối ưu mỗi tuần.</p>
-          </div>
-          <div class="api-stack">
-            <details class="api-card" open>
-              <summary>
-                <span>/api/chess/getBestMove</span>
-                <span class="badge badge--post">POST</span>
-              </summary>
-              <div class="api-card__body">
-                <p>AI lựa chọn nước cờ tiếp theo bằng engine Stockfish tuỳ biến.</p>
-                <p><strong>Request:</strong></p>
-                <pre><code>curl -X POST https://minhhoang.info/api/chess/getbestmove \
--d "fen=3r1rk1/5ppp/2p1pn2/p1P5/1p2P3/3Q1P2/PP3P1P/3RR1K1 b" \
--d "time=100"</code></pre>
-                <p><strong>Body</strong></p>
-                <ul>
-                  <li><code>fen</code>: chuỗi trạng thái bàn cờ <a href="https://www.chess.com/terms/fen-chess" target="_blank" rel="noreferrer">FEN</a>.</li>
-                  <li><code>time</code>: thời gian engine suy nghĩ (1000 = 1s, tối đa 10000).</li>
-                </ul>
-                <p><strong>Response:</strong></p>
-                <pre><code>{"bestMove":"d8d3"}</code></pre>
-              </div>
-            </details>
-            <details class="api-card">
-              <summary>
-                <span>/api/chatbot</span>
-                <span class="badge badge--post">POST</span>
-              </summary>
-              <div class="api-card__body">
-                <p>Chatbot đơn giản test flow hội thoại.</p>
-                <p><strong>Request:</strong> <code>{"message":"hello"}</code></p>
-                <p><strong>Response:</strong> <code>{"answer":"Hi, how can I help you?"}</code></p>
-              </div>
-            </details>
-            <details class="api-card">
-              <summary>
-                <span>/api/health</span>
-                <span class="badge badge--get">GET</span>
-              </summary>
-              <div class="api-card__body">
-                <p>Trạng thái nhanh của hệ thống và hàng đợi.</p>
-                <p><strong>Response:</strong> <code>{"uptime":"24h","workers":4,"status":"ok"}</code></p>
-              </div>
-            </details>
-          </div>
-        </section>
-        -->
         
         <section id="login" class="view" data-view>
           <div class="auth-shell">
             <div class="auth-hero">
-              <p class="eyebrow">Đăng nhập kiểu Việt Nam</p>
-              <h2>Thử nhập đại mật khẩu đi :D</h2>
-              <p>Không cần đăng ký hệ thống tự sinh tài khoản cho. Đời nó đơn giản thế.</p>
+              <p class="eyebrow">Đăng nhập</p>
+              <!-- <h2>Thử nhập đại mật khẩu đi :D</h2> -->
               <ul class="auth-perks">
                 <li><i class="fa fa-shield"></i> Session 30 ngày (đừng hỏi mình lưu ở đâu)</li>
                 <li><i class="fa fa-lock"></i> Quên mật khẩu? Khôi phục với mật khẩu?</li>

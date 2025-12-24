@@ -1,0 +1,852 @@
+/**
+ * Christmas Theme Styles 🎄
+ * Festive styling for the holiday season
+ */
+
+/* ============================================
+   CSS Variables - Christmas Color Scheme
+   ============================================ */
+:root {
+  --christmas-red: #d42426;
+  --christmas-red-dark: #a91d1f;
+  --christmas-green: #2d5a27;
+  --christmas-green-light: #3d7a37;
+  --christmas-gold: #c4a000;
+  --christmas-gold-light: #ffd700;
+  --christmas-snow: #f0f8ff;
+  --christmas-ice: #e8f4fc;
+  --christmas-night-bg: #1a1a2e;
+  --christmas-night-surface: #16213e;
+}
+
+/* Theme body class override - Day mode (default) */
+body.theme-christmas {
+  --color-primary: var(--christmas-red);
+  --color-primary-dark: var(--christmas-red-dark);
+  background: linear-gradient(180deg, var(--christmas-ice) 0%, var(--color-bg) 30%);
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* ============================================
+   Day/Night Mode
+   ============================================ */
+body.theme-christmas.christmas-day {
+  background: linear-gradient(180deg, 
+    #e3f2fd 0%, 
+    #f5f7fb 20%,
+    var(--color-bg) 40%
+  );
+}
+
+body.theme-christmas.christmas-night {
+  --color-bg: #1a1a2e;
+  --color-surface: #1e2746;
+  --color-muted: #8892b0;
+  --color-border: #2a3558;
+  --color-border-strong: #3d4a73;
+  
+  background: linear-gradient(180deg, 
+    #0f0f23 0%, 
+    #1a1a2e 20%,
+    #1e2746 50%,
+    #1a1a2e 100%
+  );
+  color: #e6e6e6;
+}
+
+body.theme-christmas.christmas-night .site-header {
+  background: rgba(30, 39, 70, 0.95);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.theme-christmas.christmas-night .brand {
+  color: #a8e6cf;
+}
+
+body.theme-christmas.christmas-night .profile-card,
+body.theme-christmas.christmas-night .auth-card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+}
+
+body.theme-christmas.christmas-night .profile-card__body h1,
+body.theme-christmas.christmas-night .auth-hero h2 {
+  color: #fff;
+}
+
+body.theme-christmas.christmas-night .site-footer {
+  color: var(--color-muted);
+}
+
+body.theme-christmas.christmas-night .site-nav__link {
+  color: var(--color-muted);
+}
+
+body.theme-christmas.christmas-night .site-nav__link:hover,
+body.theme-christmas.christmas-night .site-nav__link.is-active {
+  color: #fff;
+  background: rgba(212, 36, 38, 0.2);
+}
+
+/* Night mode clouds get moon glow */
+body.theme-christmas.christmas-night .christmas-clouds {
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+}
+
+body.theme-christmas.christmas-night .christmas-clouds .cloud {
+  opacity: 0.4;
+}
+
+/* Stars more visible at night */
+body.theme-christmas.christmas-night .christmas-stars polygon,
+body.theme-christmas.christmas-night .christmas-stars circle {
+  opacity: 1;
+  filter: drop-shadow(0 0 3px #ffd700);
+}
+
+/* ============================================
+   Snow Container & Snowfall Animation
+   ============================================ */
+.snow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10px) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  25% {
+    transform: translateY(25vh) translateX(calc(var(--drift) * 0.5)) rotate(90deg);
+  }
+  50% {
+    transform: translateY(50vh) translateX(var(--drift)) rotate(180deg);
+  }
+  75% {
+    transform: translateY(75vh) translateX(calc(var(--drift) * 0.5)) rotate(270deg);
+  }
+  100% {
+    transform: translateY(100vh) translateX(0) rotate(360deg);
+    opacity: 0.3;
+  }
+}
+
+.snowflake {
+  will-change: transform;
+}
+
+/* ============================================
+   Santa Hat Decoration
+   ============================================ */
+.santa-hat-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.santa-hat {
+  position: absolute;
+  top: -25%;
+  left: 50%;
+  transform: translateX(-50%) rotate(-15deg);
+  width: 80%;
+  height: auto;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.santa-hat-svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.2));
+}
+
+/* Profile card specific hat sizing - larger and better positioned */
+.profile-card__media .santa-hat-wrapper .santa-hat {
+  width: 85%;
+  top: -20%;
+  left: 55%;
+  transform: translateX(-50%) rotate(-12deg);
+}
+
+/* Nav profile hat sizing */
+.site-nav__link--profile .santa-hat-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.site-nav__link--profile .santa-hat {
+  width: 100%;
+  top: -30%;
+}
+
+/* ============================================
+   Snow-capped Icons
+   ============================================ */
+body.christmas-icons-decorated .fa::before {
+  position: relative;
+}
+
+body.christmas-icons-decorated .profile-card__meta .fa,
+body.christmas-icons-decorated .social-button .fa {
+  position: relative;
+}
+
+body.christmas-icons-decorated .profile-card__meta .fa::after,
+body.christmas-icons-decorated .social-button .fa::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 5px;
+  background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
+  border-radius: 50% 50% 0 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   Festive Glow Effects
+   ============================================ */
+body.christmas-festive-glow .social-button {
+  transition: all 0.3s ease;
+}
+
+body.christmas-festive-glow .social-button:hover {
+  box-shadow: 
+    0 0 10px rgba(212, 36, 38, 0.3),
+    0 0 20px rgba(212, 36, 38, 0.2),
+    0 0 30px rgba(212, 36, 38, 0.1);
+}
+
+body.christmas-festive-glow .profile-card {
+  border: 1px solid rgba(212, 36, 38, 0.1);
+  box-shadow: 
+    var(--color-shadow),
+    0 0 40px rgba(212, 36, 38, 0.05);
+}
+
+body.christmas-festive-glow .auth-card {
+  border: 1px solid rgba(212, 36, 38, 0.1);
+}
+
+body.christmas-festive-glow .site-header {
+  border-bottom-color: rgba(212, 36, 38, 0.15);
+}
+
+/* ============================================
+   Corner Decorations - Santa Sleigh & Clouds
+   ============================================ */
+.christmas-corner {
+  position: fixed;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.christmas-corner--top-left {
+  top: 5px;
+  left: 10px;
+  width: 220px;
+  height: 80px;
+  animation: sleigh-fly 4s ease-in-out infinite;
+}
+
+.christmas-corner--top-right {
+  top: 5px;
+  right: 10px;
+  width: 140px;
+  height: 70px;
+}
+
+@keyframes sleigh-fly {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-5px) translateX(3px);
+  }
+  50% {
+    transform: translateY(-8px) translateX(0);
+  }
+  75% {
+    transform: translateY(-3px) translateX(-3px);
+  }
+}
+
+.christmas-santa-sleigh {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.2));
+}
+
+/* Reindeer leg animation */
+@keyframes reindeer-run {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(15deg); }
+}
+
+.reindeer line {
+  transform-origin: top;
+  animation: reindeer-run 0.3s ease-in-out infinite;
+}
+
+.reindeer-2 line {
+  animation-delay: 0.15s;
+}
+
+/* ============================================
+   Header Clouds - Floating across header
+   ============================================ */
+.christmas-clouds-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  pointer-events: none;
+  z-index: 90;
+  overflow: visible;
+}
+
+.header-cloud {
+  position: absolute;
+  /* Width and height set dynamically via JS for natural variation */
+  width: 180px;
+  height: 80px;
+  animation: cloud-drift 20s ease-in-out infinite;
+  will-change: transform;
+}
+
+.cloud-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
+}
+
+@keyframes cloud-drift {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(-8px) translateY(2px);
+  }
+  50% {
+    transform: translateX(-4px) translateY(-3px);
+  }
+  75% {
+    transform: translateX(4px) translateY(1px);
+  }
+}
+
+/* Night mode clouds */
+body.theme-christmas.christmas-night .header-cloud {
+  opacity: 0.15 !important;
+}
+
+body.theme-christmas.christmas-night .cloud-svg {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+}
+
+/* Stars twinkle */
+.christmas-stars polygon,
+.christmas-stars circle {
+  animation: star-twinkle 2s ease-in-out infinite;
+}
+
+.christmas-stars polygon:nth-child(2) {
+  animation-delay: 0.7s;
+}
+
+.christmas-stars circle:nth-child(3) {
+  animation-delay: 1.4s;
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.3; }
+}
+
+/* ============================================
+   Ornament Decorations
+   ============================================ */
+.christmas-ornaments-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.christmas-ornament {
+  position: absolute;
+  top: -10px;
+  width: 20px;
+  height: 24px;
+  background: var(--ornament-color, #d42426);
+  border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
+  animation: ornament-swing 4s ease-in-out infinite;
+  box-shadow: 
+    inset -3px -3px 6px rgba(0,0,0,0.3),
+    inset 3px 3px 6px rgba(255,255,255,0.3),
+    0 3px 8px rgba(0,0,0,0.2);
+}
+
+.christmas-ornament::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(180deg, #c4a000 0%, #8b7500 100%);
+  border-radius: 2px 2px 0 0;
+}
+
+.christmas-ornament::after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  width: 1px;
+  height: 12px;
+  background: #666;
+}
+
+@keyframes ornament-swing {
+  0%, 100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+/* ============================================
+   Snow Pile Effect
+   ============================================ */
+.snow-pile {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(180deg, 
+    rgba(255,255,255,0.9) 0%, 
+    rgba(240,248,255,0.8) 50%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   Button & Link Festive Styling
+   ============================================ */
+body.theme-christmas .social-button {
+  background: rgba(212, 36, 38, 0.1);
+  color: var(--christmas-red);
+}
+
+body.theme-christmas .social-button:hover {
+  background: rgba(212, 36, 38, 0.2);
+  border-color: rgba(212, 36, 38, 0.3);
+}
+
+body.theme-christmas .eyebrow {
+  color: var(--christmas-red);
+}
+
+body.theme-christmas .chip i {
+  color: var(--christmas-green);
+}
+
+body.theme-christmas .auth-tab.is-active {
+  color: var(--christmas-red);
+  border-bottom-color: var(--christmas-red);
+}
+
+body.theme-christmas button[type="submit"] {
+  background: linear-gradient(135deg, var(--christmas-red) 0%, var(--christmas-red-dark) 100%);
+}
+
+body.theme-christmas button[type="submit"]:hover {
+  background: linear-gradient(135deg, var(--christmas-red-dark) 0%, #8a1517 100%);
+}
+
+/* ============================================
+   Site Header Festive Style
+   ============================================ */
+body.theme-christmas .site-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+}
+
+body.theme-christmas .brand {
+  color: var(--christmas-green);
+}
+
+body.theme-christmas .site-nav__link:hover,
+body.theme-christmas .site-nav__link.is-active {
+  background: rgba(212, 36, 38, 0.1);
+  color: var(--christmas-red);
+}
+
+/* ============================================
+   Footer Festive Style
+   ============================================ */
+body.theme-christmas .site-footer {
+  background: linear-gradient(180deg, transparent 0%, rgba(45, 90, 39, 0.05) 100%);
+}
+
+/* ============================================
+   Christmas Trees at Bottom
+   ============================================ */
+.christmas-trees-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 220px;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+}
+
+/* Ground snow layer */
+.christmas-ground-snow {
+  position: absolute;
+  bottom: 0;
+  left: -5%;
+  right: -5%;
+  height: 25px;
+  background: linear-gradient(180deg, 
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.8) 20%,
+    #fff 40%,
+    #f8fafc 100%
+  );
+  border-radius: 100% 100% 0 0 / 50% 50% 0 0;
+  z-index: 10;
+}
+
+.christmas-ground-snow::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 15px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(200, 220, 240, 0.3) 20%,
+    transparent 40%,
+    rgba(200, 220, 240, 0.2) 60%,
+    transparent 80%,
+    rgba(200, 220, 240, 0.3) 100%
+  );
+}
+
+/* Snow mounds */
+.christmas-snow-mound {
+  position: absolute;
+  bottom: 15px;
+  height: 20px;
+  background: radial-gradient(ellipse at center bottom, #fff 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  z-index: 11;
+}
+
+.christmas-tree {
+  position: absolute;
+  bottom: 15px;
+  transform-origin: bottom center;
+}
+
+.christmas-tree-svg {
+  width: auto;
+  height: 100%;
+  filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+/* Tree lights twinkling animation */
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.tree-light {
+  animation: twinkle 1.5s ease-in-out infinite;
+}
+
+/* Star glow animation */
+@keyframes star-glow {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.tree-star {
+  animation: star-glow 2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Subtle sway animation for trees */
+@keyframes tree-sway {
+  0%, 100% {
+    transform: rotate(-0.5deg);
+  }
+  50% {
+    transform: rotate(0.5deg);
+  }
+}
+
+.christmas-tree--decorated {
+  animation: tree-sway 8s ease-in-out infinite;
+}
+
+.christmas-tree--simple {
+  opacity: 0.85;
+}
+
+.christmas-tree:nth-child(odd) .christmas-tree--simple {
+  animation: tree-sway 10s ease-in-out infinite reverse;
+}
+
+/* ============================================
+   Snow Caps on Buttons - Enhanced
+   ============================================ */
+body.christmas-snow-buttons .social-button,
+body.christmas-snow-buttons .chip,
+body.christmas-snow-buttons button[type="submit"],
+body.christmas-snow-buttons .auth-tab,
+body.christmas-snow-buttons .site-nav__link {
+  position: relative;
+  overflow: visible;
+}
+
+/* Main snow cap on buttons */
+body.christmas-snow-buttons .social-button::before,
+body.christmas-snow-buttons button[type="submit"]::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -3px;
+  right: -3px;
+  height: 12px;
+  background: 
+    radial-gradient(ellipse 30px 12px at 15% 100%, #fff 50%, transparent 50%),
+    radial-gradient(ellipse 25px 10px at 40% 100%, #f8fafc 50%, transparent 50%),
+    radial-gradient(ellipse 35px 14px at 65% 100%, #fff 50%, transparent 50%),
+    radial-gradient(ellipse 28px 11px at 90% 100%, #f0f4f8 50%, transparent 50%);
+  pointer-events: none;
+  z-index: 10;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.05));
+}
+
+/* Snow drip effect on buttons */
+body.christmas-snow-buttons .social-button::after,
+body.christmas-snow-buttons button[type="submit"]::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 10%;
+  right: 10%;
+  height: 8px;
+  background:
+    radial-gradient(ellipse 4px 8px at 20% 0%, #fff 50%, transparent 50%),
+    radial-gradient(ellipse 3px 6px at 50% 0%, #f8fafc 50%, transparent 50%),
+    radial-gradient(ellipse 4px 7px at 80% 0%, #fff 50%, transparent 50%);
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* Lighter snow for nav links */
+body.christmas-snow-buttons .site-nav__link::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 5%;
+  right: 5%;
+  height: 8px;
+  background: 
+    radial-gradient(ellipse 20px 8px at 25% 100%, #fff 50%, transparent 50%),
+    radial-gradient(ellipse 25px 10px at 60% 100%, #f8fafc 50%, transparent 50%),
+    radial-gradient(ellipse 18px 7px at 85% 100%, #fff 50%, transparent 50%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ============================================
+   Snow on Profile Card - SVG Based ❄️
+   ============================================ */
+body.christmas-snow-buttons .profile-card {
+  position: relative;
+  overflow: visible;
+}
+
+/* SVG Snow container - sits ON the card edge */
+.profile-snow-svg {
+  position: absolute;
+  top: -15px;
+  left: 0;
+  right: 0;
+  height: 45px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.snow-pile-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+}
+
+.snow-icicles-svg {
+  position: absolute;
+  top: 22px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+
+/* Profile card setup */
+body.christmas-snow-buttons .profile-card {
+  position: relative;
+  overflow: visible;
+}
+
+/* Night mode - subtle glow */
+body.theme-christmas.christmas-night .profile-snow-svg {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+@media (max-width: 768px) {
+  .christmas-corner--top-left {
+    width: 140px;
+    height: 55px;
+  }
+  
+  .christmas-corner--top-right {
+    width: 100px;
+    height: 50px;
+  }
+  
+  .christmas-ornament {
+    width: 14px;
+    height: 18px;
+  }
+  
+  .santa-hat {
+    width: 70%;
+  }
+  
+  .christmas-trees-container {
+    height: 140px;
+  }
+  
+  .christmas-tree {
+    height: 100px !important;
+  }
+  
+  .christmas-ground-snow {
+    height: 18px;
+  }
+  
+  body.christmas-snow-buttons .social-button::before,
+  body.christmas-snow-buttons button[type="submit"]::before {
+    height: 8px;
+    top: -4px;
+  }
+  
+  body.christmas-snow-buttons .social-button::after,
+  body.christmas-snow-buttons button[type="submit"]::after {
+    display: none;
+  }
+  
+  body.christmas-snow-buttons .profile-card::before {
+    height: 14px;
+    top: -5px;
+  }
+  
+  body.christmas-snow-buttons .profile-card::after {
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .christmas-trees-container {
+    height: 100px;
+  }
+  
+  .christmas-tree {
+    height: 70px !important;
+  }
+  
+  .christmas-corner--top-left {
+    width: 100px;
+    height: 40px;
+    left: 5px;
+  }
+  
+  .christmas-clouds-container {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snowflake,
+  .christmas-ornament,
+  .santa-hat,
+  .christmas-corner--top-left,
+  .header-cloud,
+  .christmas-stars polygon,
+  .christmas-stars circle {
+    animation: none;
+  }
+  
+  .snowflake {
+    opacity: 0.5;
+  }
+}
+
+/* ============================================
+   Print Styles - Hide decorations
+   ============================================ */
+@media print {
+  .snow-container,
+  .christmas-corner,
+  .christmas-ornaments-container,
+  .christmas-trees-container,
+  .christmas-clouds-container,
+  .santa-hat {
+    display: none !important;
+  }
+  
+  body.christmas-snow-buttons .social-button::before,
+  body.christmas-snow-buttons button[type="submit"]::before,
+  body.christmas-snow-buttons .chip::before,
+  body.christmas-snow-buttons .profile-card::before,
+  body.christmas-snow-buttons .profile-card::after {
+    display: none !important;
+  }
+}
