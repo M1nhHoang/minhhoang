@@ -1,0 +1,1023 @@
+/**
+ * New Year Theme Styles 🎆
+ * Vibrant and festive styling for New Year celebration
+ */
+
+/* ============================================
+   CSS Variables - New Year Color Scheme
+   ============================================ */
+:root {
+  --newyear-gold: #ffd700;
+  --newyear-gold-light: #ffed4a;
+  --newyear-purple: #9b59b6;
+  --newyear-purple-dark: #8e44ad;
+  --newyear-red: #e74c3c;
+  --newyear-blue: #3498db;
+  --newyear-pink: #ff69b4;
+  --newyear-orange: #f39c12;
+  --newyear-green: #2ecc71;
+  --newyear-night-bg: #1a1a2e;
+  --newyear-night-surface: #16213e;
+}
+
+/* ============================================
+   Theme Body Class - Default (Night)
+   ============================================ */
+body.theme-newyear {
+  --color-primary: var(--newyear-purple);
+  --color-primary-dark: var(--newyear-purple-dark);
+  --color-bg: #1a1a2e;
+  --color-surface: #252547;
+  --color-muted: #8892b0;
+  --color-border: #3d3d6b;
+  --color-border-strong: #4d4d8b;
+  color: #e6e6e6;
+  background: linear-gradient(180deg, 
+    #1a1a2e 0%,
+    #2d1b4e 20%,
+    #1a1a2e 40%,
+    var(--color-bg) 70%
+  );
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* ============================================
+   Day Mode - Bright & Festive ☀️
+   ============================================ */
+body.theme-newyear.newyear-day {
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-border-strong: #d1d5db;
+  color: #1f2937;
+  
+  background: linear-gradient(180deg, 
+    #fff8e1 0%,
+    #ffe0b2 10%,
+    #ffecb3 20%,
+    #faf8f5 40%
+  );
+}
+
+body.theme-newyear.newyear-day .site-header {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+body.theme-newyear.newyear-day .brand {
+  background: linear-gradient(90deg, 
+    var(--newyear-orange) 0%,
+    var(--newyear-red) 50%,
+    var(--newyear-purple) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s linear infinite;
+}
+
+body.theme-newyear.newyear-day .site-nav__link {
+  color: #4b5563;
+}
+
+body.theme-newyear.newyear-day .site-nav__link:hover,
+body.theme-newyear.newyear-day .site-nav__link.is-active {
+  color: var(--newyear-purple);
+  background: rgba(155, 89, 182, 0.1);
+}
+
+body.theme-newyear.newyear-day .profile-card,
+body.theme-newyear.newyear-day .auth-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  box-shadow: 
+    0 20px 45px rgba(155, 89, 182, 0.1),
+    0 0 60px rgba(255, 215, 0, 0.1);
+}
+
+body.theme-newyear.newyear-day .profile-card__body h1,
+body.theme-newyear.newyear-day .auth-hero h2 {
+  color: #1f2937;
+}
+
+body.theme-newyear.newyear-day .site-footer {
+  background: rgba(255, 248, 225, 0.8);
+  color: #6b7280;
+}
+
+body.theme-newyear.newyear-day .social-button {
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.1) 0%,
+    rgba(243, 156, 18, 0.1) 100%
+  );
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+body.theme-newyear.newyear-day .social-button:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.2) 0%,
+    rgba(243, 156, 18, 0.2) 100%
+  );
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+body.theme-newyear.newyear-day .chip {
+  background: rgba(255, 215, 0, 0.15);
+  border-color: rgba(243, 156, 18, 0.3);
+  color: #92400e;
+}
+
+/* Day mode: reduce firework visibility, more confetti */
+body.theme-newyear.newyear-day .newyear-effects-container {
+  opacity: 0.6;
+}
+
+body.theme-newyear.newyear-day .newyear-confetti-container {
+  opacity: 1;
+}
+
+/* Day mode: hide stars background */
+body.theme-newyear.newyear-day::before {
+  opacity: 0;
+}
+
+/* ============================================
+   Night Mode - Dark & Magical 🌙
+   ============================================ */
+body.theme-newyear.newyear-night {
+  --color-bg: #0d0d1a;
+  --color-surface: #1a1a2e;
+  --color-muted: #8892b0;
+  --color-border: #2a2a4a;
+  --color-border-strong: #3d3d6b;
+  color: #e6e6e6;
+  
+  background: linear-gradient(180deg, 
+    #050510 0%,
+    #0d0d1a 20%,
+    #1a1a2e 50%,
+    #0d0d1a 100%
+  );
+}
+
+body.theme-newyear.newyear-night .site-header {
+  background: rgba(13, 13, 26, 0.95);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+body.theme-newyear.newyear-night .brand {
+  background: linear-gradient(90deg, 
+    var(--newyear-gold) 0%,
+    #fff 50%,
+    var(--newyear-gold) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s linear infinite;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+body.theme-newyear.newyear-night .site-nav__link {
+  color: #6b7b9e;
+}
+
+body.theme-newyear.newyear-night .site-nav__link:hover,
+body.theme-newyear.newyear-night .site-nav__link.is-active {
+  color: var(--newyear-gold);
+  background: rgba(255, 215, 0, 0.1);
+}
+
+body.theme-newyear.newyear-night .profile-card,
+body.theme-newyear.newyear-night .auth-card {
+  background: rgba(26, 26, 46, 0.95);
+  border: 1px solid rgba(255, 215, 0, 0.1);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 80px rgba(155, 89, 182, 0.15),
+    inset 0 0 60px rgba(255, 215, 0, 0.02);
+}
+
+body.theme-newyear.newyear-night .profile-card__body h1,
+body.theme-newyear.newyear-night .auth-hero h2 {
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+body.theme-newyear.newyear-night .site-footer {
+  background: rgba(5, 5, 16, 0.8);
+  color: #6b7b9e;
+}
+
+body.theme-newyear.newyear-night .social-button {
+  background: linear-gradient(135deg, 
+    rgba(155, 89, 182, 0.15) 0%,
+    rgba(231, 76, 60, 0.1) 50%,
+    rgba(255, 215, 0, 0.1) 100%
+  );
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+body.theme-newyear.newyear-night .social-button:hover {
+  background: linear-gradient(135deg, 
+    rgba(155, 89, 182, 0.25) 0%,
+    rgba(231, 76, 60, 0.2) 50%,
+    rgba(255, 215, 0, 0.2) 100%
+  );
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.3),
+    0 0 40px rgba(155, 89, 182, 0.2);
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+body.theme-newyear.newyear-night .chip {
+  background: rgba(155, 89, 182, 0.2);
+  border-color: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+}
+
+/* Night mode text improvements */
+body.theme-newyear.newyear-night .profile-card__body p,
+body.theme-newyear.newyear-night .project-card p {
+  color: #b8c5d9;
+}
+
+body.theme-newyear.newyear-night .profile-card__meta,
+body.theme-newyear.newyear-night .chat-tab__meta {
+  color: #8892b0;
+}
+
+body.theme-newyear.newyear-night .profile-card__meta i {
+  color: var(--newyear-gold);
+}
+
+body.theme-newyear.newyear-night .eyebrow {
+  color: var(--newyear-gold);
+}
+
+body.theme-newyear.newyear-night .project-card__title,
+body.theme-newyear.newyear-night .chat-panel__title {
+  color: #f0f0f0;
+}
+
+body.theme-newyear.newyear-night .project-card__stack {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+}
+
+body.theme-newyear.newyear-night .chat-tab__preview {
+  color: #c8d4e6;
+}
+
+body.theme-newyear.newyear-night .chat-group__title {
+  color: #8892b0;
+}
+
+/* Input fields in night mode */
+body.theme-newyear.newyear-night input,
+body.theme-newyear.newyear-night textarea,
+body.theme-newyear.newyear-night select {
+  background: rgba(26, 26, 46, 0.9);
+  border-color: var(--color-border);
+  color: #e6e6e6;
+}
+
+body.theme-newyear.newyear-night input::placeholder,
+body.theme-newyear.newyear-night textarea::placeholder {
+  color: #6b7b9e;
+}
+
+body.theme-newyear.newyear-night input:focus,
+body.theme-newyear.newyear-night textarea:focus {
+  border-color: rgba(255, 215, 0, 0.4);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+}
+
+/* Button styles in night mode */
+body.theme-newyear.newyear-night .btn,
+body.theme-newyear.newyear-night button:not(.social-button):not(.admin-daynight-btn) {
+  color: #e6e6e6;
+}
+
+body.theme-newyear.newyear-night .btn-primary {
+  background: linear-gradient(135deg, var(--newyear-purple) 0%, var(--newyear-purple-dark) 100%);
+  color: #fff;
+}
+
+/* Links in night mode */
+body.theme-newyear.newyear-night a:not(.site-nav__link):not(.social-button) {
+  color: var(--newyear-gold-light);
+}
+
+body.theme-newyear.newyear-night a:not(.site-nav__link):not(.social-button):hover {
+  color: #fff;
+}
+
+/* Badge styles in night mode */
+body.theme-newyear.newyear-night .badge {
+  color: #e6e6e6;
+}
+
+body.theme-newyear.newyear-night .badge--get {
+  background: rgba(52, 152, 219, 0.25);
+  color: #5dade2;
+}
+
+body.theme-newyear.newyear-night .badge--post {
+  background: rgba(46, 204, 113, 0.25);
+  color: #58d68d;
+}
+
+/* Message bubbles in night mode */
+body.theme-newyear.newyear-night .message__bubble {
+  background: rgba(42, 42, 74, 0.9);
+  color: #e6e6e6;
+}
+
+body.theme-newyear.newyear-night .message--outgoing .message__bubble {
+  background: linear-gradient(135deg, var(--newyear-purple) 0%, var(--newyear-purple-dark) 100%);
+  color: #fff;
+}
+
+/* API card in night mode */
+body.theme-newyear.newyear-night .api-card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+body.theme-newyear.newyear-night .api-card summary {
+  color: #e6e6e6;
+}
+
+body.theme-newyear.newyear-night .api-card__body {
+  color: #8892b0;
+}
+
+/* Project card in night mode */
+body.theme-newyear.newyear-night .project-card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+/* Chat tab in night mode */
+body.theme-newyear.newyear-night .chat-tab:hover {
+  background: rgba(255, 215, 0, 0.05);
+}
+
+body.theme-newyear.newyear-night .chat-tab.chat-active {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+/* Night mode: full firework visibility */
+body.theme-newyear.newyear-night .newyear-effects-container {
+  opacity: 1;
+}
+
+/* Night mode: stars more visible */
+body.theme-newyear.newyear-night::before {
+  opacity: 1;
+  animation: stars-twinkle 3s ease-in-out infinite;
+}
+
+/* Add moon glow effect at night */
+body.theme-newyear.newyear-night .newyear-corner--right {
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
+}
+
+/* ============================================
+   Effects Containers
+   ============================================ */
+.newyear-effects-container,
+.newyear-confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.newyear-confetti-container {
+  z-index: 9998;
+}
+
+/* ============================================
+   Firework Animations
+   ============================================ */
+@keyframes firework-particle {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: 
+      translate(
+        calc(cos(var(--angle)) * var(--distance) * var(--velocity)),
+        calc(sin(var(--angle)) * var(--distance) * var(--velocity) + 50px)
+      ) 
+      scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes firework-sparkle {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(5);
+    opacity: 0;
+  }
+}
+
+.firework-particle {
+  will-change: transform, opacity;
+}
+
+/* ============================================
+   Confetti Animation
+   ============================================ */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  25% {
+    transform: translateY(25vh) translateX(calc(var(--drift) * 0.5)) rotate(calc(var(--rotation) * 0.5));
+  }
+  50% {
+    transform: translateY(50vh) translateX(var(--drift)) rotate(var(--rotation));
+  }
+  75% {
+    transform: translateY(75vh) translateX(calc(var(--drift) * 0.5)) rotate(calc(var(--rotation) * 1.5));
+  }
+  100% {
+    transform: translateY(100vh) translateX(0) rotate(calc(var(--rotation) * 2));
+    opacity: 0.3;
+  }
+}
+
+.newyear-confetti {
+  will-change: transform;
+}
+
+/* ============================================
+   Party Hat Decoration
+   ============================================ */
+.party-hat-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.party-hat {
+  position: absolute;
+  top: -35%;
+  left: 50%;
+  transform: translateX(-50%) rotate(10deg);
+  width: 75%;
+  height: auto;
+  pointer-events: none;
+  z-index: 10;
+  animation: hat-wobble 3s ease-in-out infinite;
+}
+
+.party-hat-svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.3));
+}
+
+@keyframes hat-wobble {
+  0%, 100% {
+    transform: translateX(-50%) rotate(10deg);
+  }
+  50% {
+    transform: translateX(-50%) rotate(15deg);
+  }
+}
+
+/* Profile card specific hat sizing */
+.profile-card__media .party-hat-wrapper .party-hat {
+  width: 80%;
+  top: -30%;
+  left: 55%;
+  transform: translateX(-50%) rotate(12deg);
+}
+
+/* Nav profile hat sizing */
+.site-nav__link--profile .party-hat-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.site-nav__link--profile .party-hat {
+  width: 90%;
+  top: -40%;
+}
+
+/* ============================================
+   Corner Decorations
+   ============================================ */
+.newyear-corner {
+  position: fixed;
+  pointer-events: none;
+  z-index: 100;
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+.newyear-corner--left {
+  top: 10px;
+  left: 10px;
+}
+
+.newyear-corner--right {
+  top: 10px;
+  right: 10px;
+  animation-delay: -2s;
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ============================================
+   Sparkle Effect on Icons
+   ============================================ */
+body.newyear-sparkle-icons .fa {
+  position: relative;
+}
+
+body.newyear-sparkle-icons .social-button .fa::after,
+body.newyear-sparkle-icons .profile-card__meta .fa::after {
+  content: '✨';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 0.6em;
+  animation: sparkle-twinkle 1.5s ease-in-out infinite;
+}
+
+@keyframes sparkle-twinkle {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* ============================================
+   Festive Glow Effects
+   ============================================ */
+body.newyear-festive-glow .social-button {
+  background: linear-gradient(135deg, 
+    rgba(155, 89, 182, 0.1) 0%,
+    rgba(231, 76, 60, 0.1) 50%,
+    rgba(243, 156, 18, 0.1) 100%
+  );
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+body.newyear-festive-glow .social-button:hover {
+  background: linear-gradient(135deg, 
+    rgba(155, 89, 182, 0.2) 0%,
+    rgba(231, 76, 60, 0.2) 50%,
+    rgba(243, 156, 18, 0.2) 100%
+  );
+  box-shadow: 
+    0 0 15px rgba(255, 215, 0, 0.3),
+    0 0 30px rgba(155, 89, 182, 0.2);
+  border-color: rgba(255, 215, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+body.newyear-festive-glow .profile-card,
+body.newyear-festive-glow .auth-card {
+  background: linear-gradient(145deg, 
+    var(--color-surface) 0%,
+    rgba(155, 89, 182, 0.05) 100%
+  );
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.3),
+    0 0 60px rgba(155, 89, 182, 0.1);
+}
+
+body.newyear-festive-glow .chip {
+  background: linear-gradient(135deg, 
+    rgba(155, 89, 182, 0.15) 0%,
+    rgba(231, 76, 60, 0.1) 100%
+  );
+  border-color: rgba(255, 215, 0, 0.2);
+}
+
+/* ============================================
+   Banner Animation (Happy New Year)
+   ============================================ */
+.newyear-banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  pointer-events: none;
+  animation: banner-entrance 0.5s ease-out forwards;
+}
+
+.newyear-banner__text {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, 
+    var(--newyear-gold) 0%,
+    var(--newyear-red) 25%,
+    var(--newyear-purple) 50%,
+    var(--newyear-blue) 75%,
+    var(--newyear-gold) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  animation: gradient-shift 2s linear infinite;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+}
+
+@keyframes banner-entrance {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.newyear-banner--hide {
+  animation: banner-exit 1s ease-in forwards;
+}
+
+@keyframes banner-exit {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+/* ============================================
+   Countdown Display (Dec 31 only)
+   ============================================ */
+.newyear-countdown {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  padding: 15px 25px;
+  background: linear-gradient(135deg, 
+    rgba(155, 89, 182, 0.9) 0%,
+    rgba(231, 76, 60, 0.9) 100%
+  );
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-radius: 15px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(255, 215, 0, 0.2);
+  text-align: center;
+  animation: countdown-pulse 2s ease-in-out infinite;
+}
+
+.newyear-countdown__label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.newyear-countdown__time {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  font-family: 'Courier New', monospace;
+}
+
+@keyframes countdown-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      0 0 40px rgba(255, 215, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 
+      0 15px 40px rgba(0, 0, 0, 0.4),
+      0 0 60px rgba(255, 215, 0, 0.4);
+  }
+}
+
+/* Day mode countdown */
+body.theme-newyear.newyear-day .newyear-countdown {
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.95) 0%,
+    rgba(243, 156, 18, 0.95) 100%
+  );
+  border-color: rgba(231, 76, 60, 0.5);
+}
+
+body.theme-newyear.newyear-day .newyear-countdown__label {
+  color: #92400e;
+}
+
+body.theme-newyear.newyear-day .newyear-countdown__time {
+  color: #7c2d12;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   Header & Navigation
+   ============================================ */
+body.theme-newyear .site-header {
+  background: rgba(26, 26, 46, 0.95);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+body.theme-newyear .brand {
+  background: linear-gradient(90deg, 
+    var(--newyear-gold) 0%,
+    var(--newyear-purple) 50%,
+    var(--newyear-gold) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s linear infinite;
+}
+
+body.theme-newyear .site-nav__link {
+  color: var(--color-muted);
+  transition: all 0.3s ease;
+}
+
+body.theme-newyear .site-nav__link:hover,
+body.theme-newyear .site-nav__link.is-active {
+  color: var(--newyear-gold);
+  background: rgba(155, 89, 182, 0.2);
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+body.theme-newyear .site-footer {
+  color: var(--color-muted);
+  background: rgba(26, 26, 46, 0.8);
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+body.theme-newyear .btn--primary {
+  background: linear-gradient(135deg, 
+    var(--newyear-purple) 0%,
+    var(--newyear-red) 100%
+  );
+  border: none;
+  box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+}
+
+body.theme-newyear .btn--primary:hover {
+  background: linear-gradient(135deg, 
+    var(--newyear-purple-dark) 0%,
+    #c0392b 100%
+  );
+  box-shadow: 0 6px 20px rgba(155, 89, 182, 0.6);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   Form Inputs
+   ============================================ */
+body.theme-newyear .form-field input:focus,
+body.theme-newyear .form-field textarea:focus {
+  border-color: var(--newyear-gold);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+@media (max-width: 768px) {
+  .party-hat {
+    width: 60%;
+    top: -30%;
+  }
+  
+  .newyear-corner {
+    transform: scale(0.7);
+  }
+  
+  .newyear-corner--left {
+    top: 5px;
+    left: -10px;
+  }
+  
+  .newyear-corner--right {
+    top: 5px;
+    right: -10px;
+  }
+  
+  .newyear-banner__text {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .newyear-corner {
+    display: none;
+  }
+  
+  .newyear-banner__text {
+    font-size: 1.2rem;
+  }
+}
+
+/* ============================================
+   Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .firework-particle,
+  .newyear-confetti,
+  .party-hat,
+  .newyear-corner,
+  .newyear-banner,
+  .newyear-banner__text,
+  body.newyear-sparkle-icons .fa::after {
+    animation: none !important;
+  }
+  
+  .newyear-effects-container,
+  .newyear-confetti-container {
+    display: none;
+  }
+}
+
+/* ============================================
+   Print - Hide decorations
+   ============================================ */
+@media print {
+  .newyear-effects-container,
+  .newyear-confetti-container,
+  .newyear-corner,
+  .party-hat,
+  .newyear-banner {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   Stars Background Effect
+   ============================================ */
+body.theme-newyear::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+    radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 230px 80px, #fff, transparent),
+    radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 370px 60px, #fff, transparent),
+    radial-gradient(2px 2px at 450px 100px, rgba(255,255,255,0.8), transparent);
+  background-repeat: repeat;
+  background-size: 500px 200px;
+  animation: stars-twinkle 4s ease-in-out infinite;
+  transition: opacity 0.5s ease;
+}
+
+@keyframes stars-twinkle {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   Day Mode - Sun Rays Effect
+   ============================================ */
+body.theme-newyear.newyear-day::after {
+  content: '';
+  position: fixed;
+  top: -50%;
+  right: -20%;
+  width: 60%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 215, 0, 0.15) 0%,
+    rgba(255, 215, 0, 0.05) 40%,
+    transparent 70%
+  );
+  animation: sun-pulse 5s ease-in-out infinite;
+}
+
+@keyframes sun-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   Night Mode - Moon Effect
+   ============================================ */
+body.theme-newyear.newyear-night::after {
+  content: '';
+  position: fixed;
+  top: 30px;
+  right: 50px;
+  width: 60px;
+  height: 60px;
+  pointer-events: none;
+  z-index: 50;
+  background: radial-gradient(
+    circle at 30% 30%,
+    #fffde7 0%,
+    #fff9c4 30%,
+    #ffd54f 100%
+  );
+  border-radius: 50%;
+  box-shadow: 
+    0 0 30px rgba(255, 215, 0, 0.5),
+    0 0 60px rgba(255, 215, 0, 0.3),
+    0 0 100px rgba(255, 215, 0, 0.2);
+  animation: moon-glow 4s ease-in-out infinite;
+}
+
+@keyframes moon-glow {
+  0%, 100% {
+    box-shadow: 
+      0 0 30px rgba(255, 215, 0, 0.5),
+      0 0 60px rgba(255, 215, 0, 0.3),
+      0 0 100px rgba(255, 215, 0, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 0 40px rgba(255, 215, 0, 0.7),
+      0 0 80px rgba(255, 215, 0, 0.4),
+      0 0 120px rgba(255, 215, 0, 0.3);
+  }
+}

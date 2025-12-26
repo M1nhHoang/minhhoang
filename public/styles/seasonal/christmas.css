@@ -30,20 +30,112 @@ body.theme-christmas {
 /* ============================================
    Day/Night Mode
    ============================================ */
+
+/* ============================================
+   Day Mode - Bright & Snowy ☀️
+   ============================================ */
 body.theme-christmas.christmas-day {
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-muted: #64748b;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  color: #1e293b;
+  
   background: linear-gradient(180deg, 
     #e3f2fd 0%, 
-    #f5f7fb 20%,
-    var(--color-bg) 40%
+    #bbdefb 10%,
+    #e1f5fe 20%,
+    #f8fafc 40%
   );
 }
 
+body.theme-christmas.christmas-day .site-header {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(212, 36, 38, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+body.theme-christmas.christmas-day .brand {
+  color: var(--christmas-red);
+}
+
+body.theme-christmas.christmas-day .site-nav__link {
+  color: #475569;
+}
+
+body.theme-christmas.christmas-day .site-nav__link:hover,
+body.theme-christmas.christmas-day .site-nav__link.is-active {
+  color: var(--christmas-red);
+  background: rgba(212, 36, 38, 0.1);
+}
+
+body.theme-christmas.christmas-day .profile-card,
+body.theme-christmas.christmas-day .auth-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(212, 36, 38, 0.15);
+  box-shadow: 
+    0 20px 45px rgba(45, 90, 39, 0.1),
+    0 0 60px rgba(212, 36, 38, 0.05);
+}
+
+body.theme-christmas.christmas-day .profile-card__body h1,
+body.theme-christmas.christmas-day .auth-hero h2 {
+  color: #1e293b;
+}
+
+body.theme-christmas.christmas-day .site-footer {
+  background: rgba(227, 242, 253, 0.8);
+  color: #64748b;
+}
+
+body.theme-christmas.christmas-day .social-button {
+  background: linear-gradient(135deg, 
+    rgba(212, 36, 38, 0.08) 0%,
+    rgba(45, 90, 39, 0.08) 100%
+  );
+  border: 1px solid rgba(212, 36, 38, 0.2);
+}
+
+body.theme-christmas.christmas-day .social-button:hover {
+  background: linear-gradient(135deg, 
+    rgba(212, 36, 38, 0.15) 0%,
+    rgba(45, 90, 39, 0.15) 100%
+  );
+  box-shadow: 0 0 20px rgba(212, 36, 38, 0.2);
+}
+
+body.theme-christmas.christmas-day .chip {
+  background: rgba(45, 90, 39, 0.1);
+  border-color: rgba(45, 90, 39, 0.2);
+  color: var(--christmas-green);
+}
+
+/* Day mode: snow more visible */
+body.theme-christmas.christmas-day .snow-container {
+  opacity: 1;
+}
+
+body.theme-christmas.christmas-day .snowflake {
+  background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0.9) 50%, transparent 100%);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+/* Day mode: hide stars */
+body.theme-christmas.christmas-day .christmas-stars {
+  opacity: 0;
+}
+
+/* ============================================
+   Night Mode - Cozy & Magical 🌙
+   ============================================ */
 body.theme-christmas.christmas-night {
   --color-bg: #1a1a2e;
   --color-surface: #1e2746;
   --color-muted: #8892b0;
   --color-border: #2a3558;
   --color-border-strong: #3d4a73;
+  color: #e6e6e6;
   
   background: linear-gradient(180deg, 
     #0f0f23 0%, 
@@ -51,32 +143,17 @@ body.theme-christmas.christmas-night {
     #1e2746 50%,
     #1a1a2e 100%
   );
-  color: #e6e6e6;
 }
 
 body.theme-christmas.christmas-night .site-header {
   background: rgba(30, 39, 70, 0.95);
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 body.theme-christmas.christmas-night .brand {
   color: #a8e6cf;
-}
-
-body.theme-christmas.christmas-night .profile-card,
-body.theme-christmas.christmas-night .auth-card {
-  background: var(--color-surface);
-  border-color: var(--color-border);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
-}
-
-body.theme-christmas.christmas-night .profile-card__body h1,
-body.theme-christmas.christmas-night .auth-hero h2 {
-  color: #fff;
-}
-
-body.theme-christmas.christmas-night .site-footer {
-  color: var(--color-muted);
+  text-shadow: 0 0 20px rgba(168, 230, 207, 0.3);
 }
 
 body.theme-christmas.christmas-night .site-nav__link {
@@ -87,6 +164,190 @@ body.theme-christmas.christmas-night .site-nav__link:hover,
 body.theme-christmas.christmas-night .site-nav__link.is-active {
   color: #fff;
   background: rgba(212, 36, 38, 0.2);
+}
+
+body.theme-christmas.christmas-night .profile-card,
+body.theme-christmas.christmas-night .auth-card {
+  background: rgba(30, 39, 70, 0.95);
+  border: 1px solid rgba(212, 36, 38, 0.2);
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(212, 36, 38, 0.1),
+    inset 0 0 60px rgba(255, 215, 0, 0.02);
+}
+
+body.theme-christmas.christmas-night .profile-card__body h1,
+body.theme-christmas.christmas-night .auth-hero h2 {
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+body.theme-christmas.christmas-night .site-footer {
+  background: rgba(15, 15, 35, 0.8);
+  color: var(--color-muted);
+}
+
+body.theme-christmas.christmas-night .social-button {
+  background: linear-gradient(135deg, 
+    rgba(212, 36, 38, 0.15) 0%,
+    rgba(45, 90, 39, 0.1) 100%
+  );
+  border: 1px solid rgba(212, 36, 38, 0.25);
+}
+
+body.theme-christmas.christmas-night .social-button:hover {
+  background: linear-gradient(135deg, 
+    rgba(212, 36, 38, 0.25) 0%,
+    rgba(45, 90, 39, 0.2) 100%
+  );
+  box-shadow: 
+    0 0 20px rgba(212, 36, 38, 0.3),
+    0 0 40px rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+body.theme-christmas.christmas-night .chip {
+  background: rgba(45, 90, 39, 0.2);
+  border-color: rgba(45, 90, 39, 0.3);
+  color: #a8e6cf;
+}
+
+/* Night mode text improvements */
+body.theme-christmas.christmas-night .profile-card__body p,
+body.theme-christmas.christmas-night .project-card p {
+  color: #b8c5d9;
+}
+
+body.theme-christmas.christmas-night .profile-card__meta,
+body.theme-christmas.christmas-night .chat-tab__meta {
+  color: #8892b0;
+}
+
+body.theme-christmas.christmas-night .profile-card__meta i {
+  color: var(--christmas-red);
+}
+
+body.theme-christmas.christmas-night .eyebrow {
+  color: var(--christmas-red);
+}
+
+body.theme-christmas.christmas-night .project-card__title,
+body.theme-christmas.christmas-night .chat-panel__title {
+  color: #f0f0f0;
+}
+
+body.theme-christmas.christmas-night .project-card__stack {
+  background: rgba(212, 36, 38, 0.15);
+  color: #ff8a8a;
+}
+
+body.theme-christmas.christmas-night .chat-tab__preview {
+  color: #c8d4e6;
+}
+
+body.theme-christmas.christmas-night .chat-group__title {
+  color: #8892b0;
+}
+
+/* Input fields in night mode */
+body.theme-christmas.christmas-night input,
+body.theme-christmas.christmas-night textarea,
+body.theme-christmas.christmas-night select {
+  background: rgba(30, 39, 70, 0.9);
+  border-color: var(--color-border);
+  color: #e6e6e6;
+}
+
+body.theme-christmas.christmas-night input::placeholder,
+body.theme-christmas.christmas-night textarea::placeholder {
+  color: #6b7b9e;
+}
+
+body.theme-christmas.christmas-night input:focus,
+body.theme-christmas.christmas-night textarea:focus {
+  border-color: rgba(212, 36, 38, 0.4);
+  box-shadow: 0 0 10px rgba(212, 36, 38, 0.1);
+}
+
+/* Button styles in night mode */
+body.theme-christmas.christmas-night .btn,
+body.theme-christmas.christmas-night button:not(.social-button):not(.admin-daynight-btn) {
+  color: #e6e6e6;
+}
+
+body.theme-christmas.christmas-night .btn-primary {
+  background: linear-gradient(135deg, var(--christmas-red) 0%, var(--christmas-red-dark) 100%);
+  color: #fff;
+}
+
+/* Links in night mode */
+body.theme-christmas.christmas-night a:not(.site-nav__link):not(.social-button) {
+  color: #ff8a8a;
+}
+
+body.theme-christmas.christmas-night a:not(.site-nav__link):not(.social-button):hover {
+  color: #fff;
+}
+
+/* Badge styles in night mode */
+body.theme-christmas.christmas-night .badge {
+  color: #e6e6e6;
+}
+
+body.theme-christmas.christmas-night .badge--get {
+  background: rgba(52, 152, 219, 0.25);
+  color: #5dade2;
+}
+
+body.theme-christmas.christmas-night .badge--post {
+  background: rgba(46, 204, 113, 0.25);
+  color: #58d68d;
+}
+
+/* Message bubbles in night mode */
+body.theme-christmas.christmas-night .message__bubble {
+  background: rgba(42, 55, 90, 0.9);
+  color: #e6e6e6;
+}
+
+body.theme-christmas.christmas-night .message--outgoing .message__bubble {
+  background: linear-gradient(135deg, var(--christmas-red) 0%, var(--christmas-red-dark) 100%);
+  color: #fff;
+}
+
+/* API card in night mode */
+body.theme-christmas.christmas-night .api-card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+body.theme-christmas.christmas-night .api-card summary {
+  color: #e6e6e6;
+}
+
+body.theme-christmas.christmas-night .api-card__body {
+  color: #8892b0;
+}
+
+/* Project card in night mode */
+body.theme-christmas.christmas-night .project-card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+/* Chat tab in night mode */
+body.theme-christmas.christmas-night .chat-tab:hover {
+  background: rgba(212, 36, 38, 0.05);
+}
+
+body.theme-christmas.christmas-night .chat-tab.chat-active {
+  background: rgba(212, 36, 38, 0.1);
+  border-color: rgba(212, 36, 38, 0.3);
+}
+
+/* Night mode: snow with glow */
+body.theme-christmas.christmas-night .snowflake {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
 /* Night mode clouds get moon glow */

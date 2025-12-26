@@ -1,13 +1,13 @@
 /**
- * Christmas Theme
- * 🎄 Festive theme for December 20-26
+ * New Year Theme 🎆
+ * Festive theme for December 27 - January 3
  * 
  * Features:
- * - Snowfall effect (intensity based on weather)
- * - Santa hats on avatars
- * - Snow-capped icons
- * - Festive color scheme
- * - Corner holly decorations
+ * - Fireworks effect (particle explosions)
+ * - Vibrant color scheme (gold, purple, blue)
+ * - Countdown decorations
+ * - Sparkle effects on UI elements
+ * - Celebratory confetti
  */
 
 import effects from './effects.js';
@@ -15,12 +15,12 @@ import decorations from './decorations.js';
 
 // Theme configuration
 const CONFIG = {
-  id: 'christmas',
-  name: 'Giáng Sinh 🎄',
+  id: 'newyear',
+  name: 'Năm Mới 🎆',
   priority: 100,
   dateRange: {
-    start: [12, 20], // December 20
-    end: [12, 26]    // December 26
+    start: [12, 27], // December 27
+    end: [1, 3]      // January 3
   }
 };
 
@@ -28,6 +28,25 @@ const CONFIG = {
 let isInitialized = false;
 let currentWeather = null;
 let isDaytime = true;
+
+/**
+ * Calculate firework intensity based on weather
+ */
+function calculateFireworkIntensity(weather) {
+  if (!weather?.effects) {
+    return 0.6; // Default festive intensity
+  }
+  
+  const { intensity, isDaytime: isDay } = weather.effects;
+  
+  // Fireworks look better at night!
+  if (!isDay) {
+    return Math.max(0.7, intensity);
+  }
+  
+  // During day, reduce intensity slightly
+  return Math.max(0.4, intensity * 0.8);
+}
 
 /**
  * Apply day/night mode based on weather
@@ -40,79 +59,54 @@ function applyDayNightMode(weather) {
   if (weather?.effects?.isDaytime !== undefined) {
     isDaytime = weather.effects.isDaytime;
   } else {
-    // Fallback: check current hour (6h-18h = day)
+    // Fallback: check current hour
     const hour = new Date().getHours();
     isDaytime = hour >= 6 && hour < 18;
   }
   
   // Remove existing mode classes
-  body.classList.remove('christmas-day', 'christmas-night');
+  body.classList.remove('newyear-day', 'newyear-night');
   
   // Apply appropriate mode
   if (isDaytime) {
-    body.classList.add('christmas-day');
-    console.log('[ChristmasTheme] Day mode activated ☀️');
+    body.classList.add('newyear-day');
+    console.log('[NewYearTheme] Day mode activated ☀️');
   } else {
-    body.classList.add('christmas-night');
-    console.log('[ChristmasTheme] Night mode activated 🌙');
+    body.classList.add('newyear-night');
+    console.log('[NewYearTheme] Night mode activated 🌙');
   }
 }
 
 /**
- * Calculate snow intensity based on weather
- * For Christmas: rain = snow effect
- */
-function calculateSnowIntensity(weather) {
-  if (!weather?.effects) {
-    return 0.4; // Default light snow
-  }
-  
-  const { intensity, isRainy, isSnowy } = weather.effects;
-  
-  // If actually snowing, use real intensity
-  if (isSnowy) {
-    return Math.max(0.3, intensity);
-  }
-  
-  // Convert rain to snow for Christmas theme
-  if (isRainy) {
-    return Math.max(0.4, intensity);
-  }
-  
-  // Default: light decorative snow
-  return 0.3;
-}
-
-/**
- * Initialize the Christmas theme
+ * Initialize the New Year theme
  * @param {Object} context - Context with weather data
  */
 async function init(context = {}) {
   if (isInitialized) return;
   
-  console.log('[ChristmasTheme] Initializing...');
+  console.log('[NewYearTheme] Initializing...');
   
   currentWeather = context.weather;
   
-  // Load CSS dynamically if not already loaded
+  // Load CSS dynamically
   await loadStyles();
   
   isInitialized = true;
-  console.log('[ChristmasTheme] Ready! 🎄');
+  console.log('[NewYearTheme] Ready! 🎆');
 }
 
 /**
- * Load Christmas CSS
+ * Load New Year CSS
  */
 async function loadStyles() {
-  const styleId = 'christmas-theme-styles';
+  const styleId = 'newyear-theme-styles';
   
   if (document.getElementById(styleId)) return;
   
   const link = document.createElement('link');
   link.id = styleId;
   link.rel = 'stylesheet';
-  link.href = '/styles/seasonal/christmas.css';
+  link.href = '/styles/seasonal/newyear.css';
   
   return new Promise((resolve, reject) => {
     link.onload = resolve;
@@ -122,7 +116,7 @@ async function loadStyles() {
 }
 
 /**
- * Apply visual effects
+ * Apply visual effects (fireworks)
  * @param {Object} weather - Current weather data
  */
 async function applyEffects(weather) {
@@ -131,22 +125,22 @@ async function applyEffects(weather) {
   // Apply day/night mode
   applyDayNightMode(weather);
   
-  const intensity = calculateSnowIntensity(weather);
+  const intensity = calculateFireworkIntensity(weather);
   
-  console.log(`[ChristmasTheme] Starting snow with intensity: ${intensity.toFixed(2)}`);
+  console.log(`[NewYearTheme] Starting fireworks with intensity: ${intensity.toFixed(2)}`);
   
   effects.start(intensity);
 }
 
 /**
- * Apply decorations
+ * Apply decorations (sparkles, countdown, etc.)
  */
 async function applyDecorations() {
   decorations.applyAll();
 }
 
 /**
- * Update based on weather changes
+ * Handle weather updates
  * @param {Object} weather - New weather data
  */
 function updateWeather(weather) {
@@ -157,42 +151,42 @@ function updateWeather(weather) {
   // Update day/night mode
   applyDayNightMode(weather);
   
-  const intensity = calculateSnowIntensity(weather);
+  const intensity = calculateFireworkIntensity(weather);
   
   effects.updateIntensity(intensity);
 }
 
 /**
- * Cleanup and destroy theme
+ * Cleanup theme
  */
 async function destroy() {
-  console.log('[ChristmasTheme] Destroying...');
+  console.log('[NewYearTheme] Destroying...');
   
   effects.stop();
   decorations.removeAll();
   
   // Remove day/night mode classes
-  document.body.classList.remove('christmas-day', 'christmas-night');
+  document.body.classList.remove('newyear-day', 'newyear-night');
   
   // Remove CSS
-  const styleEl = document.getElementById('christmas-theme-styles');
+  const styleEl = document.getElementById('newyear-theme-styles');
   if (styleEl) styleEl.remove();
   
   isInitialized = false;
   currentWeather = null;
   isDaytime = true;
   
-  console.log('[ChristmasTheme] Goodbye! 🎄');
+  console.log('[NewYearTheme] Goodbye! 🎆');
 }
 
 /**
- * Get current theme state
+ * Get current state
  */
 function getState() {
   return {
     isInitialized,
     weather: currentWeather,
-    snowActive: effects.isActive(),
+    effectsActive: effects.isActive(),
     isDaytime
   };
 }

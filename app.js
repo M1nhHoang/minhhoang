@@ -3,8 +3,9 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-const { connectDatabase } = require('./config/database');
+const { connectDatabase, initializeDefaultAdmin } = require('./config/database');
 const logger = require('./config/logger');
+const { attachUser } = require('./middleware/authMiddleware');
 
 const pageRoutes = require('./routes/pageRoutes');
 const apiRoutes = require('./routes/apiRoutes');
@@ -19,6 +20,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Attach user to request from X-Username header (for authenticated requests)
+app.use(attachUser);
 
 // routes
 app.use('/', pageRoutes);
@@ -46,6 +50,7 @@ const port = process.env.PORT || 3000;
 
 async function start() {
   await connectDatabase();
+  await initializeDefaultAdmin();
   app.listen(port, () => {
     logger.info(`Server started on port ${port}`);
   });

@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/styles/app.css?v=__ASSET_VERSION__">
+    <link rel="stylesheet" href="/styles/admin.css?v=__ASSET_VERSION__">
   </head>
   <body>
     <div class="app-shell">
@@ -26,11 +27,38 @@
               <li class="site-nav__item">
                 <a class="site-nav__link" href="#personal-info" data-view-link>Portfolio card</a>
               </li>
-              <li class="site-nav__item site-nav__item--profile">
-                <a class="site-nav__link site-nav__link--profile" href="#login" data-view-link>
-                  <img src="https://minhhoang.info/images/doglagging.png" alt="Đăng nhập đê, xem chùa à?">
+              <!-- Admin only -->
+              <li class="site-nav__item is-hidden" data-show-if="admin">
+                <a class="site-nav__link" href="#admin-dashboard" data-view-link data-nav-admin>
+                  <i class="fa fa-dashboard"></i> Admin
+                </a>
+              </li>
+              <!-- VIP only -->
+              <li class="site-nav__item is-hidden" data-show-if="vip">
+                <a class="site-nav__link" href="#vip-zone" data-view-link data-nav-vip>
+                  <i class="fa fa-star"></i> VIP Zone
+                </a>
+              </li>
+              <!-- Guest: show login -->
+              <li class="site-nav__item site-nav__item--profile" data-show-if="guest">
+                <a class="site-nav__link site-nav__link--profile" href="#login" data-view-link data-nav-login>
+                  <img src="https://minhhoang.info/images/doglagging.png" alt="Đăng nhập đê, xem chùa à?" data-user-avatar>
                   <span>Đăng nhập</span>
                 </a>
+              </li>
+              <!-- Logged in: show profile -->
+              <li class="site-nav__item site-nav__item--profile is-hidden" data-show-if="logged-in">
+                <a class="site-nav__link site-nav__link--profile" href="#profile" data-view-link data-nav-profile>
+                  <img src="https://minhhoang.info/images/doglagging.png" alt="Profile" data-user-avatar>
+                  <span data-user-name>User</span>
+                  <span class="user-role-badge" data-user-role>Guest</span>
+                </a>
+              </li>
+              <!-- Logout button -->
+              <li class="site-nav__item is-hidden" data-show-if="logged-in">
+                <button class="site-nav__link site-nav__link--logout" data-nav-logout>
+                  <i class="fa fa-sign-out"></i> Đăng xuất
+                </button>
               </li>
             </ul>
           </nav>
@@ -118,6 +146,131 @@
               </form>
 
               <div class="auth-feedback is-hidden" role="status" aria-live="polite" data-auth-feedback></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Admin Dashboard - Chỉ Admin (role 99) -->
+        <section id="admin-dashboard" class="view" data-view data-require-role="99">
+          <div class="admin-dashboard">
+            <div class="admin-dashboard__header">
+              <h1 class="admin-dashboard__title">
+                <i class="fa fa-dashboard"></i> Admin Dashboard
+              </h1>
+              <div class="admin-dashboard__actions">
+                <button class="admin-btn admin-btn--refresh" data-admin-refresh>
+                  <i class="fa fa-refresh"></i> Refresh
+                </button>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="admin-stats" data-admin-stats>
+              <!-- Stats will be rendered by JS -->
+            </div>
+
+            <!-- User Management -->
+            <div class="admin-panel">
+              <div class="admin-panel__header">
+                <h2 class="admin-panel__title">
+                  <i class="fa fa-users"></i> Quản lý Users
+                </h2>
+                <div class="admin-panel__filters">
+                  <div class="admin-search">
+                    <i class="fa fa-search"></i>
+                    <input type="text" placeholder="Tìm user..." data-admin-search>
+                  </div>
+                  <select class="admin-filter-select" data-admin-filter-role>
+                    <option value="all">Tất cả roles</option>
+                    <option value="0">Guest</option>
+                    <option value="1">Verified</option>
+                    <option value="2">VIP</option>
+                    <option value="99">Admin</option>
+                  </select>
+                </div>
+              </div>
+              <div class="admin-table-container">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>Role</th>
+                      <th>Status</th>
+                      <th>Verified</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody data-admin-user-list>
+                    <!-- User rows will be rendered by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Theme Management -->
+            <div class="admin-panel">
+              <div class="admin-panel__header">
+                <h2 class="admin-panel__title">
+                  <i class="fa fa-paint-brush"></i> Quản lý Seasonal Themes
+                </h2>
+              </div>
+              <div class="admin-panel__body" data-admin-theme>
+                <!-- Theme panel will be rendered by JS -->
+                <div class="admin-loading">
+                  <i class="fa fa-spinner fa-spin"></i> Loading themes...
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIP Zone - Chỉ VIP+ (role >= 2) -->
+        <section id="vip-zone" class="view" data-view data-require-role="2">
+          <div class="vip-zone">
+            <div class="vip-zone__header">
+              <p class="eyebrow">⭐ VIP Zone</p>
+              <h1>Chào mừng VIP!</h1>
+              <p>Bạn đang truy cập khu vực dành riêng cho thành viên VIP.</p>
+            </div>
+            <div class="vip-zone__content">
+              <div class="vip-feature-card">
+                <i class="fa fa-cloud"></i>
+                <h3>Weather Forecast Pro</h3>
+                <p>Xem dự báo thời tiết chi tiết 7 ngày</p>
+              </div>
+              <div class="vip-feature-card">
+                <i class="fa fa-bolt"></i>
+                <h3>Priority Support</h3>
+                <p>Được hỗ trợ ưu tiên 24/7</p>
+              </div>
+              <div class="vip-feature-card">
+                <i class="fa fa-diamond"></i>
+                <h3>Exclusive Features</h3>
+                <p>Truy cập các tính năng độc quyền</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- User Profile - Verified+ (role >= 1) -->
+        <section id="profile" class="view" data-view data-require-role="1">
+          <div class="profile-section">
+            <div class="profile-header">
+              <img src="https://minhhoang.info/images/doglagging.png" alt="Avatar" class="profile-avatar" data-user-avatar>
+              <div class="profile-info">
+                <h1 data-user-name>Username</h1>
+                <span class="role-badge" data-user-role>Role</span>
+              </div>
+            </div>
+            <div class="profile-details">
+              <div class="profile-card">
+                <h3><i class="fa fa-info-circle"></i> Thông tin tài khoản</h3>
+                <ul class="profile-meta">
+                  <li><strong>Username:</strong> <span data-user-name>-</span></li>
+                  <li><strong>Role:</strong> <span data-user-role>-</span></li>
+                  <li><strong>Status:</strong> <span class="status-dot status--online"></span> Online</li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>

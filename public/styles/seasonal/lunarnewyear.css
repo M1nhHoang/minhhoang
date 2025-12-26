@@ -1,0 +1,673 @@
+/**
+ * Lunar New Year Theme Styles 🧧
+ * Tết Nguyên Đán - Vietnamese New Year
+ * Features: Lion dance, peach blossoms, fireworks
+ */
+
+/* ============================================
+   CSS Variables - Lunar New Year Color Scheme
+   ============================================ */
+:root {
+  --lunar-red: #FF0000;
+  --lunar-red-dark: #CC0000;
+  --lunar-red-light: #FF6B6B;
+  --lunar-gold: #FFD700;
+  --lunar-gold-dark: #DAA520;
+  --lunar-pink: #FFB7C5;
+  --lunar-pink-dark: #FF69B4;
+  --lunar-orange: #FFA500;
+  --lunar-yellow: #FFFF00;
+  --lunar-night-bg: #1a0a0a;
+  --lunar-night-surface: #2a1515;
+}
+
+/* ============================================
+   Theme Body Class - Default
+   ============================================ */
+body.theme-lunarnewyear {
+  --color-primary: var(--lunar-red);
+  --color-primary-dark: var(--lunar-red-dark);
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* ============================================
+   Day Mode - Bright & Festive ☀️
+   ============================================ */
+body.theme-lunarnewyear.lunarnewyear-day {
+  --color-bg: #fff5f5;
+  --color-surface: #ffffff;
+  --color-muted: #6b5050;
+  --color-border: #ffe0e0;
+  --color-border-strong: #ffc8c8;
+  color: #2d1a1a;
+  
+  background: linear-gradient(180deg, 
+    #ffe8e8 0%,
+    #fff0e0 10%,
+    #fffaf5 20%,
+    #fff5f5 40%
+  );
+}
+
+body.theme-lunarnewyear.lunarnewyear-day .site-header {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(255, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+body.theme-lunarnewyear.lunarnewyear-day .brand {
+  background: linear-gradient(90deg, 
+    var(--lunar-red) 0%,
+    var(--lunar-gold) 50%,
+    var(--lunar-red) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s linear infinite;
+}
+
+body.theme-lunarnewyear.lunarnewyear-day .site-nav__link {
+  color: #5c4040;
+}
+
+body.theme-lunarnewyear.lunarnewyear-day .site-nav__link:hover,
+body.theme-lunarnewyear.lunarnewyear-day .site-nav__link.is-active {
+  color: var(--lunar-red);
+  background: rgba(255, 0, 0, 0.1);
+}
+
+body.theme-lunarnewyear.lunarnewyear-day .profile-card,
+body.theme-lunarnewyear.lunarnewyear-day .auth-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  box-shadow: 
+    0 20px 45px rgba(255, 0, 0, 0.08),
+    0 0 60px rgba(255, 215, 0, 0.1);
+}
+
+body.theme-lunarnewyear.lunarnewyear-day .profile-card__body h1,
+body.theme-lunarnewyear.lunarnewyear-day .auth-hero h2 {
+  color: #2d1a1a;
+}
+
+body.theme-lunarnewyear.lunarnewyear-day .site-footer {
+  background: rgba(255, 240, 224, 0.8);
+  color: #6b5050;
+}
+
+body.theme-lunarnewyear.lunarnewyear-day .social-button {
+  background: linear-gradient(135deg, 
+    rgba(255, 0, 0, 0.08) 0%,
+    rgba(255, 215, 0, 0.08) 100%
+  );
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+body.theme-lunarnewyear.lunarnewyear-day .social-button:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 0, 0, 0.15) 0%,
+    rgba(255, 215, 0, 0.15) 100%
+  );
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+}
+
+body.theme-lunarnewyear.lunarnewyear-day .chip {
+  background: rgba(255, 0, 0, 0.1);
+  border-color: rgba(255, 0, 0, 0.2);
+  color: var(--lunar-red-dark);
+}
+
+/* Day mode: reduce firework visibility */
+body.theme-lunarnewyear.lunarnewyear-day .lunarnewyear-effects-container {
+  opacity: 0.5;
+}
+
+/* ============================================
+   Night Mode - Traditional & Magical 🌙
+   ============================================ */
+body.theme-lunarnewyear.lunarnewyear-night {
+  --color-bg: #1a0a0a;
+  --color-surface: #2a1515;
+  --color-muted: #a08888;
+  --color-border: #3d2525;
+  --color-border-strong: #4d3535;
+  color: #f0e0e0;
+  
+  background: linear-gradient(180deg, 
+    #0d0505 0%,
+    #1a0a0a 20%,
+    #2a1515 50%,
+    #1a0a0a 100%
+  );
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .site-header {
+  background: rgba(26, 10, 10, 0.95);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .brand {
+  background: linear-gradient(90deg, 
+    var(--lunar-gold) 0%,
+    #fff 50%,
+    var(--lunar-gold) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s linear infinite;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .site-nav__link {
+  color: #a08888;
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .site-nav__link:hover,
+body.theme-lunarnewyear.lunarnewyear-night .site-nav__link.is-active {
+  color: var(--lunar-gold);
+  background: rgba(255, 215, 0, 0.1);
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .profile-card,
+body.theme-lunarnewyear.lunarnewyear-night .auth-card {
+  background: rgba(42, 21, 21, 0.95);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 80px rgba(255, 0, 0, 0.1),
+    inset 0 0 60px rgba(255, 215, 0, 0.02);
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .profile-card__body h1,
+body.theme-lunarnewyear.lunarnewyear-night .auth-hero h2 {
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .site-footer {
+  background: rgba(13, 5, 5, 0.8);
+  color: #a08888;
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .social-button {
+  background: linear-gradient(135deg, 
+    rgba(255, 0, 0, 0.15) 0%,
+    rgba(255, 215, 0, 0.1) 100%
+  );
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .social-button:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 0, 0, 0.25) 0%,
+    rgba(255, 215, 0, 0.2) 100%
+  );
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.3),
+    0 0 40px rgba(255, 0, 0, 0.2);
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .chip {
+  background: rgba(255, 0, 0, 0.2);
+  border-color: rgba(255, 215, 0, 0.2);
+  color: var(--lunar-gold);
+}
+
+/* Night mode text improvements */
+body.theme-lunarnewyear.lunarnewyear-night .profile-card__body p,
+body.theme-lunarnewyear.lunarnewyear-night .project-card p {
+  color: #c8b8b8;
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .profile-card__meta,
+body.theme-lunarnewyear.lunarnewyear-night .chat-tab__meta {
+  color: #a08888;
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .profile-card__meta i {
+  color: var(--lunar-gold);
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .eyebrow {
+  color: var(--lunar-red);
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .project-card__title,
+body.theme-lunarnewyear.lunarnewyear-night .chat-panel__title {
+  color: #f0e0e0;
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .project-card__stack {
+  background: rgba(255, 215, 0, 0.15);
+  color: var(--lunar-gold);
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .chat-tab__preview {
+  color: #d8c8c8;
+}
+
+/* Input fields in night mode */
+body.theme-lunarnewyear.lunarnewyear-night input,
+body.theme-lunarnewyear.lunarnewyear-night textarea,
+body.theme-lunarnewyear.lunarnewyear-night select {
+  background: rgba(42, 21, 21, 0.9);
+  border-color: var(--color-border);
+  color: #f0e0e0;
+}
+
+body.theme-lunarnewyear.lunarnewyear-night input::placeholder,
+body.theme-lunarnewyear.lunarnewyear-night textarea::placeholder {
+  color: #806868;
+}
+
+body.theme-lunarnewyear.lunarnewyear-night input:focus,
+body.theme-lunarnewyear.lunarnewyear-night textarea:focus {
+  border-color: rgba(255, 215, 0, 0.4);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+}
+
+/* Badge styles in night mode */
+body.theme-lunarnewyear.lunarnewyear-night .badge--get {
+  background: rgba(52, 152, 219, 0.25);
+  color: #5dade2;
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .badge--post {
+  background: rgba(46, 204, 113, 0.25);
+  color: #58d68d;
+}
+
+/* Message bubbles in night mode */
+body.theme-lunarnewyear.lunarnewyear-night .message__bubble {
+  background: rgba(61, 37, 37, 0.9);
+  color: #f0e0e0;
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .message--outgoing .message__bubble {
+  background: linear-gradient(135deg, var(--lunar-red) 0%, var(--lunar-red-dark) 100%);
+  color: #fff;
+}
+
+/* Project card in night mode */
+body.theme-lunarnewyear.lunarnewyear-night .project-card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+/* Chat tab in night mode */
+body.theme-lunarnewyear.lunarnewyear-night .chat-tab:hover {
+  background: rgba(255, 215, 0, 0.05);
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .chat-tab.chat-active {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+/* Night mode: full firework visibility */
+body.theme-lunarnewyear.lunarnewyear-night .lunarnewyear-effects-container {
+  opacity: 1;
+}
+
+/* ============================================
+   Effects Container
+   ============================================ */
+.lunarnewyear-effects-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* ============================================
+   Firework Animations
+   ============================================ */
+@keyframes explosion-flash {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(15);
+    opacity: 0;
+  }
+}
+
+.firework-particle {
+  will-change: transform, opacity;
+}
+
+.firework-explosion {
+  border-radius: 50%;
+}
+
+.firework-sparkle {
+  border-radius: 50%;
+}
+
+/* ============================================
+   Mai & Đào Tree Garden (Bottom)
+   ============================================ */
+.lunarnewyear-garden {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 190px;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+  background: linear-gradient(0deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0) 70%);
+}
+
+.garden-tree {
+  position: absolute;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.garden-tree .tree-svg {
+  width: 90px;
+  height: auto;
+  filter: drop-shadow(2px 3px 5px rgba(0,0,0,0.2));
+}
+
+/* Mai tree (yellow) glow */
+.garden-tree.mai .tree-svg {
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4)) 
+          drop-shadow(2px 3px 5px rgba(0,0,0,0.2));
+}
+
+/* Đào tree (pink) glow */
+.garden-tree.dao .tree-svg {
+  filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.3)) 
+          drop-shadow(2px 3px 5px rgba(0,0,0,0.2));
+}
+
+/* Tree sway animation */
+@keyframes tree-sway {
+  0%, 100% {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  25% {
+    transform: translateX(-50%) rotate(0.5deg);
+  }
+  75% {
+    transform: translateX(-50%) rotate(-0.5deg);
+  }
+}
+
+/* Blossom pulse animation */
+.blossom-pulse {
+  animation: blossom-glow 2s ease-in-out infinite;
+}
+
+@keyframes blossom-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px currentColor);
+    opacity: 1;
+  }
+  50% {
+    filter: drop-shadow(0 0 6px currentColor);
+    opacity: 0.9;
+  }
+}
+
+/* Night mode garden adjustments */
+body.theme-lunarnewyear.lunarnewyear-night .lunarnewyear-garden {
+  opacity: 0.85;
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .garden-tree.mai .tree-svg {
+  filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.6)) 
+          drop-shadow(2px 3px 5px rgba(0,0,0,0.3));
+}
+
+body.theme-lunarnewyear.lunarnewyear-night .garden-tree.dao .tree-svg {
+  filter: drop-shadow(0 0 12px rgba(255, 105, 180, 0.5)) 
+          drop-shadow(2px 3px 5px rgba(0,0,0,0.3));
+}
+
+/* ============================================
+   Corner Decorations
+   ============================================ */
+.lunarnewyear-corner {
+  position: fixed;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.lunarnewyear-corner--left {
+  top: 10px;
+  left: 10px;
+  width: 80px;
+  height: 100px;
+  animation: sway-left 4s ease-in-out infinite;
+}
+
+.lunarnewyear-corner--right {
+  top: 10px;
+  right: 10px;
+  width: 50px;
+  height: 70px;
+  animation: float-gentle 3s ease-in-out infinite;
+}
+
+@keyframes sway-left {
+  0%, 100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(5deg);
+  }
+}
+
+/* Peach blossom animation */
+.peach-blossom-svg .blossom {
+  animation: blossom-pulse 3s ease-in-out infinite;
+}
+
+.peach-blossom-svg .blossom-1 { animation-delay: 0s; }
+.peach-blossom-svg .blossom-2 { animation-delay: 0.5s; }
+.peach-blossom-svg .blossom-3 { animation-delay: 1s; }
+.peach-blossom-svg .blossom-4 { animation-delay: 1.5s; }
+
+@keyframes blossom-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+/* Falling petals in corner */
+.peach-blossom-svg .petal {
+  animation: petal-fall 4s ease-in-out infinite;
+}
+
+.peach-blossom-svg .petal-1 { animation-delay: 0s; }
+.peach-blossom-svg .petal-2 { animation-delay: 1.5s; }
+.peach-blossom-svg .petal-3 { animation-delay: 3s; }
+
+@keyframes petal-fall {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(30px) translateX(10px) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+/* Lucky envelope glow */
+.lucky-envelope-svg {
+  animation: envelope-glow 2s ease-in-out infinite;
+}
+
+@keyframes envelope-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+  }
+}
+
+/* ============================================
+   Floating Peach Petals
+   ============================================ */
+.lunarnewyear-petals-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  overflow: hidden;
+}
+
+.floating-petal {
+  position: absolute;
+  top: -20px;
+  left: var(--start-x);
+  width: var(--petal-size);
+  height: var(--petal-size);
+  background: radial-gradient(ellipse at center, 
+    var(--lunar-pink) 0%, 
+    var(--lunar-pink-dark) 70%, 
+    transparent 100%
+  );
+  border-radius: 50% 0 50% 50%;
+  opacity: 0.8;
+  animation: petal-float var(--fall-duration) linear var(--fall-delay) infinite;
+  will-change: transform;
+}
+
+@keyframes petal-float {
+  0% {
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+    opacity: 0.8;
+  }
+  25% {
+    transform: translateY(25vh) translateX(calc(var(--drift) * 0.5)) rotate(calc(var(--rotation) * 0.25));
+  }
+  50% {
+    transform: translateY(50vh) translateX(var(--drift)) rotate(calc(var(--rotation) * 0.5));
+  }
+  75% {
+    transform: translateY(75vh) translateX(calc(var(--drift) * 0.5)) rotate(calc(var(--rotation) * 0.75));
+  }
+  100% {
+    transform: translateY(100vh) translateX(0) rotate(var(--rotation));
+    opacity: 0.3;
+  }
+}
+
+/* ============================================
+   Festive Glow Effects
+   ============================================ */
+body.lunarnewyear-festive-glow .social-button {
+  transition: all 0.3s ease;
+}
+
+body.lunarnewyear-festive-glow .profile-card,
+body.lunarnewyear-festive-glow .auth-card {
+  background: linear-gradient(145deg, 
+    var(--color-surface) 0%,
+    rgba(255, 0, 0, 0.03) 100%
+  );
+}
+
+/* ============================================
+   Gradient Animation
+   ============================================ */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+  .lunarnewyear-garden {
+    height: 130px;
+  }
+  
+  .garden-tree .tree-svg {
+    width: 60px;
+  }
+  
+  .lunarnewyear-corner--left {
+    width: 60px;
+    height: 75px;
+  }
+  
+  .lunarnewyear-corner--right {
+    width: 40px;
+    height: 55px;
+  }
+  
+  .floating-petal {
+    opacity: 0.6;
+  }
+}
+
+/* ============================================
+   Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .garden-tree,
+  .lunarnewyear-corner,
+  .floating-petal,
+  .peach-blossom-svg .blossom,
+  .peach-blossom-svg .petal,
+  .lucky-envelope-svg,
+  .blossom-pulse {
+    animation: none;
+  }
+  
+  .firework-particle {
+    animation: none;
+  }
+}
+
+/* ============================================
+   Print - Hide decorations
+   ============================================ */
+@media print {
+  .lunarnewyear-effects-container,
+  .lunarnewyear-corner,
+  .lunarnewyear-petals-container,
+  .lunarnewyear-garden {
+    display: none !important;
+  }
+}

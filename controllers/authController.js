@@ -39,7 +39,16 @@ async function login(req, res, next) {
     return res.json({
       data: {
         ...basePayload,
-        message: 'Đăng nhập thành công (demo).'
+        type: result.type,
+        role: result.role,
+        roleName: result.roleName,
+        isAdmin: result.isAdmin,
+        isVIP: result.isVIP,
+        message: result.isAdmin 
+          ? 'Chào mừng Admin! 👑' 
+          : result.isVIP 
+            ? 'Chào mừng VIP! ⭐' 
+            : 'Đăng nhập thành công.'
       }
     });
   } catch (error) {

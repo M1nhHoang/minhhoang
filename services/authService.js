@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const { USER_ROLES } = require('../models/userModel');
 
 const WORD_FIRST = [
   'nguoi',
@@ -115,7 +116,7 @@ async function authenticate(username, password) {
 
   const user = await User.findOne({ username: normalizedUsername }).lean();
   if (!user || (user.password || '') !== normalizedPassword) {
-    throw errorWithStatus('invalid credentials', 401);
+    throw errorWithStatus('Sai tên đăng nhập hoặc mật khẩu, thử lại nhé!', 401);
   }
 
   if (user.isVerified === false) {
@@ -126,15 +127,48 @@ async function authenticate(username, password) {
     };
   }
 
+  // Determine role name for response
+  const roleName = getRoleName(user.role);
+  const isAdmin = user.role === USER_ROLES.ADMIN;
+  const isVIP = user.role >= USER_ROLES.VIP;
+
   return {
     username: user.username,
-    isVerified: true
+    isVerified: true,
+    type: user.type,
+    role: user.role,
+    roleName,
+    isAdmin,
+    isVIP
   };
+}
+
+/**
+ * Get human-readable role name from role number
+ */
+function getRoleName(roleValue) {
+  const roleNames = {
+    [USER_ROLES.GUEST]: 'Guest',
+    [USER_ROLES.VERIFIED]: 'Verified',
+    [USER_ROLES.VIP]: 'VIP',
+    [USER_ROLES.ADMIN]: 'Admin'
+  };
+  return roleNames[roleValue] || 'Unknown';
+}
+
+/**
+ * Check if a user has required permission level
+ */
+function hasPermission(userRole, requiredRole) {
+  return (userRole || 0) >= requiredRole;
 }
 
 module.exports = {
   authenticate,
   createLegendaryAccount,
   pickRickroll,
-  RICKROLL_LINKS
+  getRoleName,
+  hasPermission,
+  RICKROLL_LINKS,
+  USER_ROLES
 };

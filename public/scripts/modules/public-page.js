@@ -1,3 +1,5 @@
+import auth from './auth/index.js';
+
 const DEFAULT_PROJECTS = [
   {
     title: "Legacy Realtime Chat Hub",
@@ -243,12 +245,22 @@ function setupAuthForms(elements) {
 
       setButtonLoading(submit, true);
       try {
-        const data = await postJson(AUTH_ENDPOINTS.login, { username, password });
+        const result = await auth.login(username, password);
         setFeedback(
           feedbackEl,
           "success",
-          data.message || "Đăng nhập thành công (demo)."
+          result.message || "Đăng nhập thành công!"
         );
+        // Redirect based on role
+        setTimeout(() => {
+          if (result.user.isAdmin) {
+            window.location.hash = '#admin-dashboard';
+          } else if (result.user.isVIP) {
+            window.location.hash = '#vip-zone';
+          } else {
+            window.location.hash = '#profile';
+          }
+        }, 1000);
       } catch (error) {
         const data = error.data || {};
         if (error.status === 403) {
@@ -266,7 +278,7 @@ function setupAuthForms(elements) {
         setFeedback(
           feedbackEl,
           "error",
-          error.message || "Đăng nhập thất bại, thử lại nhé."
+          error.message || "Sai tên đăng nhập hoặc mật khẩu, thử lại nhé!"
         );
       } finally {
         setButtonLoading(submit, false);

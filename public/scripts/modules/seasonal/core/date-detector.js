@@ -18,19 +18,35 @@ const EVENTS = {
       end: new Date(year, 11, 26, 23, 59, 59) // Dec 26
     })
   },
-  tet: {
-    id: 'tet',
+  newyear: {
+    id: 'newyear',
+    name: 'Năm Mới',
+    priority: 100,
+    getDateRange: (year) => ({
+      start: new Date(year, 11, 30), // Dec 30
+      end: new Date(year + 1, 0, 3, 23, 59, 59) // Jan 3 next year
+    })
+  },
+  lunarnewyear: {
+    id: 'lunarnewyear',
     name: 'Tết Nguyên Đán',
     priority: 100,
-    // Tết dates vary each year - this is approximate
-    // In real implementation, you'd calculate from lunar calendar
+    // Tết dates vary each year - calculated from lunar calendar
+    // Quy ước: khoảng sự kiện Tết từ 28 tháng Chạp (âm lịch) đến hết mùng 7 (âm lịch).
+    // Vì không tính âm lịch trực tiếp ở đây, ta map sẵn ngày Tết (mùng 1) theo dương lịch,
+    // rồi suy ra: start = (mùng 1 - 2 ngày), end = (mùng 1 + 6 ngày).
     getDateRange: (year) => {
-      // Approximate Tết dates (usually late Jan - mid Feb)
-      // This should be updated yearly or calculated from lunar calendar
       const tetDates = {
-        2025: { start: new Date(2025, 0, 25), end: new Date(2025, 1, 9) },
-        2026: { start: new Date(2026, 1, 14), end: new Date(2026, 1, 28) },
-        2027: { start: new Date(2027, 1, 3), end: new Date(2027, 1, 17) }
+        2025: { start: new Date(2025, 0, 27), end: new Date(2025, 1, 4, 23, 59, 59) },  // Tết 2025: 29/01
+        2026: { start: new Date(2026, 1, 15), end: new Date(2026, 1, 23, 23, 59, 59) }, // Tết 2026: 17/02
+        2027: { start: new Date(2027, 1, 4),  end: new Date(2027, 1, 12, 23, 59, 59) }, // Tết 2027: 06/02
+        2028: { start: new Date(2028, 0, 24), end: new Date(2028, 1, 1, 23, 59, 59) },  // Tết 2028: 26/01
+        2029: { start: new Date(2029, 1, 11), end: new Date(2029, 1, 19, 23, 59, 59) }, // Tết 2029: 13/02
+        2030: { start: new Date(2030, 1, 1),  end: new Date(2030, 1, 9, 23, 59, 59) },  // Tết 2030: 03/02
+        2031: { start: new Date(2031, 0, 21), end: new Date(2031, 0, 29, 23, 59, 59) }, // Tết 2031: 23/01
+        2032: { start: new Date(2032, 1, 9),  end: new Date(2032, 1, 17, 23, 59, 59) }, // Tết 2032: 11/02
+        2033: { start: new Date(2033, 0, 29), end: new Date(2033, 1, 6, 23, 59, 59) },  // Tết 2033: 31/01
+        2034: { start: new Date(2034, 1, 17), end: new Date(2034, 1, 25, 23, 59, 59) }  // Tết 2034: 19/02
       };
       return tetDates[year] || { start: new Date(year, 0, 25), end: new Date(year, 1, 9) };
     }

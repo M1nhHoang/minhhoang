@@ -7,7 +7,8 @@
  * - core/: Core functionality (manager, weather service, date detector)
  * - themes/: Individual theme modules
  *   - christmas/: 🎄 Christmas theme (Dec 20-26)
- *   - tet/: 🧧 Vietnamese New Year theme
+ *   - newyear/: 🎆 New Year theme (Dec 30 - Jan 3)
+ *   - lunarnewyear/: 🧧 Vietnamese Lunar New Year theme (Tết)
  *   - spring/: 🌸 Spring season theme
  *   - summer/: ☀️ Summer season theme
  *   - autumn/: 🍂 Autumn season theme
@@ -28,8 +29,9 @@ import seasonalManager from './core/seasonal-manager.js';
 
 // Import themes
 import christmasTheme from './themes/christmas/index.js';
+import newyearTheme from './themes/newyear/index.js';
+import lunarnewyearTheme from './themes/lunarnewyear/index.js';
 // Future themes:
-// import tetTheme from './themes/tet/index.js';
 // import springTheme from './themes/spring/index.js';
 // import summerTheme from './themes/summer/index.js';
 // import autumnTheme from './themes/autumn/index.js';
@@ -42,8 +44,13 @@ function registerThemes() {
   // Register Christmas theme
   seasonalManager.registerTheme(christmasTheme);
   
+  // Register New Year theme
+  seasonalManager.registerTheme(newyearTheme);
+  
+  // Register Lunar New Year (Tết) theme
+  seasonalManager.registerTheme(lunarnewyearTheme);
+  
   // Future themes registration:
-  // seasonalManager.registerTheme(tetTheme);
   // seasonalManager.registerTheme(springTheme);
   // seasonalManager.registerTheme(summerTheme);
   // seasonalManager.registerTheme(autumnTheme);

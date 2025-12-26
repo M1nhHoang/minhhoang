@@ -788,7 +788,8 @@ export function applyAll() {
   createCornerDecorations();
   createChristmasTrees();
   applyButtonSnowCaps();
-  startDayNightUpdates();
+  // Note: Day/night mode is now handled by index.js based on weather data
+  // startDayNightUpdates(); // Removed - handled in index.js
 }
 
 /**
@@ -803,6 +804,8 @@ export function removeAll() {
   removeChristmasTrees();
   removeButtonSnowCaps();
   stopDayNightUpdates();
+  // Also remove day/night classes
+  document.body.classList.remove('christmas-day', 'christmas-night');
   decoratedElements.clear();
 }
 

@@ -14,9 +14,13 @@ Tài liệu này hướng dẫn chi tiết cách thêm các sự kiện/theme m�
 6. [Bước 4: Đăng Ký Theme](#6-bước-4-đăng-ký-theme)
 7. [Theme Interface API](#7-theme-interface-api)
 8. [Tích Hợp Weather](#8-tích-hợp-weather)
-9. [Best Practices](#9-best-practices)
-10. [Ví Dụ Hoàn Chỉnh: Valentine Theme](#10-ví-dụ-hoàn-chỉnh-valentine-theme)
-11. [Troubleshooting](#11-troubleshooting)
+9. [Day/Night Mode](#9-daynight-mode)
+10. [Admin Dashboard Integration](#10-admin-dashboard-integration)
+11. [Best Practices](#11-best-practices)
+12. [Ví Dụ: New Year Theme](#12-ví-dụ-new-year-theme)
+13. [Ví Dụ: Lunar New Year Theme](#13-ví-dụ-lunar-new-year-theme)
+14. [Ví Dụ: Valentine Theme](#14-ví-dụ-valentine-theme)
+15. [Troubleshooting](#15-troubleshooting)
 
 ---
 
@@ -45,8 +49,8 @@ Tài liệu này hướng dẫn chi tiết cách thêm các sự kiện/theme m�
          ┌─────────────────┼─────────────────┐
          ▼                 ▼                 ▼
 ┌─────────────────┐ ┌─────────────┐ ┌─────────────────┐
-│   christmas/    │ │    tet/     │ │   valentine/    │
-│   Theme 🎄      │ │  Theme 🧧   │ │   Theme 💕      │
+│   christmas/    │ │   newyear/  │ │   valentine/    │
+│   Theme 🎄      │ │  Theme 🎆   │ │   Theme 💕      │
 └─────────────────┘ └─────────────┘ └─────────────────┘
 ```
 
@@ -55,9 +59,9 @@ Tài liệu này hướng dẫn chi tiết cách thêm các sự kiện/theme m�
 1. `app.js` gọi `initSeasonal()`
 2. `seasonal/index.js` đăng ký tất cả themes với manager
 3. `date-detector.js` xác định sự kiện/mùa hiện tại
-4. `weather-service.js` lấy thông tin thời tiết
+4. `weather-service.js` lấy thông tin thời tiết (bao gồm `isDaytime`)
 5. `seasonal-manager.js` apply theme phù hợp
-6. Theme module khởi tạo decorations và effects
+6. Theme module khởi tạo decorations, effects và **day/night mode**
 
 ---
 
@@ -75,21 +79,27 @@ public/
 │           │   └── weather-service.js   # Lấy thời tiết
 │           └── themes/
 │               ├── christmas/           # 🎄 Theme Giáng Sinh
-│               │   ├── index.js
+│               │   ├── index.js         # Day/Night mode support
 │               │   ├── decorations.js
 │               │   └── effects.js
-│               ├── tet/                 # 🧧 Theme Tết (tạo mới)
-│               │   ├── index.js
-│               │   ├── decorations.js
-│               │   └── effects.js
+│               ├── newyear/             # 🎆 Theme Năm Mới
+│               │   ├── index.js         # Day/Night mode support
+│               │   ├── decorations.js   # Countdown, balloons
+│               │   └── effects.js       # Fireworks, confetti
+│               ├── lunarnewyear/        # 🧧 Theme Tết Nguyên Đán
+│               │   ├── index.js         # Day/Night mode support
+│               │   ├── decorations.js   # Lân, hoa đào, lì xì
+│               │   └── effects.js       # Pháo hoa từ dưới lên
 │               └── valentine/           # 💕 Theme Valentine (tạo mới)
 │                   ├── index.js
 │                   ├── decorations.js
 │                   └── effects.js
 └── styles/
     └── seasonal/
-        ├── christmas.css
-        ├── tet.css                      # (tạo mới)
+        ├── christmas.css                # Day/Night CSS support
+        ├── newyear.css                  # Day/Night CSS support
+        ├── lunarnewyear.css             # Day/Night CSS support
+```
         └── valentine.css                # (tạo mới)
 ```
 
@@ -908,7 +918,303 @@ function calculateEffectIntensity(weather) {
 
 ---
 
-## 9. Best Practices
+## 9. Day/Night Mode
+
+### 9.1. Tổng Quan
+
+Mỗi theme có thể hỗ trợ **Day Mode** (ban ngày) và **Night Mode** (ban đêm) với giao diện khác nhau:
+
+| Mode | Đặc điểm | CSS Classes |
+|------|----------|-------------|
+| **Day** ☀️ | Màu sáng, gradient ấm, effects nhẹ | `.theme-xxx.xxx-day` |
+| **Night** 🌙 | Màu tối, stars/glow, effects mạnh | `.theme-xxx.xxx-night` |
+
+### 9.2. Cách Xác Định Day/Night
+
+**Thứ tự ưu tiên:**
+1. **Admin Override**: Nếu admin chọn manual mode trong dashboard
+2. **Weather API**: Dựa vào `weather.effects.isDaytime` từ API
+3. **Time Fallback**: 6h-18h = day, còn lại = night
+
+```javascript
+function applyDayNightMode(weather) {
+  const themeId = 'newyear'; // hoặc 'christmas'
+  
+  // 1. Kiểm tra admin override
+  const savedMode = localStorage.getItem('minhhoang_daynight_mode');
+  let isDaytime;
+  
+  if (savedMode === 'day') {
+    isDaytime = true;
+  } else if (savedMode === 'night') {
+    isDaytime = false;
+  } else {
+    // 2. Weather API hoặc fallback
+    isDaytime = weather?.effects?.isDaytime ?? (new Date().getHours() >= 6 && new Date().getHours() < 18);
+  }
+  
+  // 3. Apply CSS classes
+  document.body.classList.remove(`${themeId}-day`, `${themeId}-night`);
+  document.body.classList.add(isDaytime ? `${themeId}-day` : `${themeId}-night`);
+}
+```
+
+### 9.3. CSS Structure cho Day/Night
+
+```css
+/* ============================================
+   Day Mode - Bright ☀️
+   ============================================ */
+body.theme-yourTheme.yourTheme-day {
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-muted: #6b7280;
+  color: #1f2937;
+  
+  background: linear-gradient(180deg, 
+    #fff8e1 0%,        /* Warm yellow */
+    #ffe0b2 10%,
+    #faf8f5 40%
+  );
+}
+
+body.theme-yourTheme.yourTheme-day .site-header {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+body.theme-yourTheme.yourTheme-day .profile-card {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* ============================================
+   Night Mode - Dark 🌙
+   ============================================ */
+body.theme-yourTheme.yourTheme-night {
+  --color-bg: #0d0d1a;
+  --color-surface: #1a1a2e;
+  --color-muted: #8892b0;
+  color: #e6e6e6;
+  
+  background: linear-gradient(180deg, 
+    #050510 0%,        /* Deep dark */
+    #0d0d1a 20%,
+    #1a1a2e 50%
+  );
+}
+
+body.theme-yourTheme.yourTheme-night .site-header {
+  background: rgba(13, 13, 26, 0.95);
+}
+
+body.theme-yourTheme.yourTheme-night .profile-card {
+  background: rgba(26, 26, 46, 0.95);
+  box-shadow: 0 0 60px rgba(155, 89, 182, 0.15);
+}
+
+/* Night mode text colors - QUAN TRỌNG để dễ đọc */
+body.theme-yourTheme.yourTheme-night .profile-card__body p,
+body.theme-yourTheme.yourTheme-night .project-card p {
+  color: #b8c5d9;
+}
+
+body.theme-yourTheme.yourTheme-night .eyebrow {
+  color: var(--your-theme-accent);
+}
+
+body.theme-yourTheme.yourTheme-night input,
+body.theme-yourTheme.yourTheme-night textarea {
+  background: rgba(26, 26, 46, 0.9);
+  color: #e6e6e6;
+}
+
+body.theme-yourTheme.yourTheme-night input::placeholder {
+  color: #6b7b9e;
+}
+```
+
+### 9.4. Tích Hợp vào Theme Index.js
+
+```javascript
+// themes/yourTheme/index.js
+
+let isDaytime = true;
+
+async function applyEffects(weather) {
+  currentWeather = weather;
+  
+  // Apply day/night mode
+  applyDayNightMode(weather);
+  
+  // Effects intensity khác nhau cho day/night
+  const intensity = calculateEffectIntensity(weather);
+  effects.start(intensity);
+}
+
+function applyDayNightMode(weather) {
+  const savedMode = localStorage.getItem('minhhoang_daynight_mode');
+  
+  if (savedMode === 'day') {
+    isDaytime = true;
+  } else if (savedMode === 'night') {
+    isDaytime = false;
+  } else {
+    isDaytime = weather?.effects?.isDaytime ?? (new Date().getHours() >= 6 && new Date().getHours() < 18);
+  }
+  
+  document.body.classList.remove('yourTheme-day', 'yourTheme-night');
+  document.body.classList.add(isDaytime ? 'yourTheme-day' : 'yourTheme-night');
+  
+  console.log(`[YourTheme] Applied ${isDaytime ? 'day' : 'night'} mode`);
+}
+```
+
+---
+
+## 10. Admin Dashboard Integration
+
+### 10.1. Theme Icons
+
+Mỗi theme cần một icon để hiển thị trong Admin Dashboard. Thêm vào `admin-dashboard.js`:
+
+```javascript
+// dashboard/admin-dashboard.js
+
+function getThemeIcon(themeId) {
+  const icons = {
+    christmas: '🎄',
+    newyear: '🎆',      // Pháo hoa
+    tet: '🧧',          // Bao lì xì
+    valentine: '💕',
+    spring: '🌸',
+    summer: '☀️',
+    autumn: '🍂',
+    winter: '❄️',
+    halloween: '🎃'
+  };
+  return icons[themeId] || '🎨';
+}
+```
+
+### 10.2. Day/Night Toggle UI
+
+Admin Dashboard có control để chuyển đổi Day/Night mode thủ công:
+
+```html
+<!-- Trong Theme Panel -->
+<div class="admin-theme-daynight">
+  <label><i class="fa fa-adjust"></i> Chế độ Ngày/Đêm:</label>
+  <div class="admin-daynight-toggle" data-daynight-toggle>
+    <button class="admin-daynight-btn" data-daynight="auto">Auto</button>
+    <button class="admin-daynight-btn" data-daynight="day">☀️ Ngày</button>
+    <button class="admin-daynight-btn" data-daynight="night">🌙 Đêm</button>
+  </div>
+</div>
+```
+
+### 10.3. Day/Night Toggle Handler
+
+```javascript
+// dashboard/admin-dashboard.js
+
+function handleDayNightToggle(mode) {
+  // Lưu preference
+  if (mode === 'auto') {
+    localStorage.removeItem('minhhoang_daynight_mode');
+  } else {
+    localStorage.setItem('minhhoang_daynight_mode', mode);
+  }
+  
+  // Apply ngay lập tức
+  const currentTheme = localStorage.getItem('minhhoang_seasonal_theme');
+  if (currentTheme) {
+    // Xóa class cũ
+    document.body.classList.remove(
+      `${currentTheme}-day`, `${currentTheme}-night`
+    );
+    
+    // Apply class mới
+    if (mode === 'auto') {
+      const hour = new Date().getHours();
+      const isDaytime = hour >= 6 && hour < 18;
+      document.body.classList.add(isDaytime ? `${currentTheme}-day` : `${currentTheme}-night`);
+    } else {
+      document.body.classList.add(`${currentTheme}-${mode}`);
+    }
+  }
+  
+  // Update active button
+  document.querySelectorAll('.admin-daynight-btn').forEach(btn => {
+    btn.classList.toggle('admin-daynight-btn--active', 
+      btn.dataset.daynight === mode);
+  });
+}
+```
+
+### 10.4. CSS cho Day/Night Toggle
+
+```css
+/* styles/admin.css */
+
+.admin-theme-daynight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.05) 0%, 
+    rgba(100, 100, 200, 0.05) 100%
+  );
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.admin-daynight-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-daynight-btn {
+  padding: 0.5rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-daynight-btn:hover {
+  transform: translateY(-1px);
+}
+
+.admin-daynight-btn--active[data-daynight="auto"] {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: #a855f7;
+  color: #a855f7;
+}
+
+.admin-daynight-btn--active[data-daynight="day"] {
+  background: rgba(255, 220, 0, 0.2);
+  border-color: #f59e0b;
+  color: #b45309;
+}
+
+.admin-daynight-btn--active[data-daynight="night"] {
+  background: rgba(30, 30, 80, 0.2);
+  border-color: #6366f1;
+  color: #4f46e5;
+}
+```
+
+### 10.5. LocalStorage Keys
+
+| Key | Values | Mô tả |
+|-----|--------|-------|
+| `minhhoang_seasonal_theme` | `christmas`, `newyear`, `none`, ... | Theme đang active |
+| `minhhoang_daynight_mode` | `day`, `night`, (null = auto) | Override day/night |
+
+---
+
+## 11. Best Practices
 
 ### ✅ Nên Làm
 
@@ -958,10 +1264,385 @@ function calculateEffectIntensity(weather) {
 3. **Missing z-index management** - Elements chồng lên UI quan trọng
 4. **Hardcoded dates** - Không dùng date-detector
 5. **No print styles** - Decorations xuất hiện khi in
+6. **Missing night mode text colors** - Text khó đọc trên nền tối
 
 ---
 
-## 10. Ví Dụ Hoàn Chỉnh: Valentine Theme
+## 12. Ví Dụ: New Year Theme 🎆
+
+Theme Năm Mới với pháo hoa, confetti, countdown và hỗ trợ Day/Night mode.
+
+### Bước 1: Đăng ký trong date-detector.js
+
+```javascript
+newyear: {
+  id: 'newyear',
+  name: 'Năm Mới',
+  priority: 100,
+  getDateRange: (year) => ({
+    start: new Date(year, 11, 30),     // Dec 30
+    end: new Date(year + 1, 0, 3, 23, 59, 59)  // Jan 3 năm sau
+  })
+}
+```
+
+### Bước 2: Theme Structure
+
+```
+themes/newyear/
+├── index.js          # Entry point với day/night mode
+├── decorations.js    # Party hats, balloons, countdown
+└── effects.js        # Fireworks & confetti particles
+```
+
+### Bước 3: index.js với Day/Night Support
+
+```javascript
+import effects from './effects.js';
+import decorations from './decorations.js';
+
+const CONFIG = {
+  id: 'newyear',
+  name: 'Năm Mới 🎆',
+  priority: 100
+};
+
+let isInitialized = false;
+let currentWeather = null;
+let isDaytime = true;
+
+async function init(context = {}) {
+  if (isInitialized) return;
+  currentWeather = context.weather;
+  await loadStyles();
+  isInitialized = true;
+}
+
+async function loadStyles() {
+  const link = document.createElement('link');
+  link.id = 'newyear-theme-styles';
+  link.rel = 'stylesheet';
+  link.href = '/styles/seasonal/newyear.css';
+  document.head.appendChild(link);
+}
+
+async function applyEffects(weather) {
+  currentWeather = weather;
+  
+  // Apply day/night mode TRƯỚC
+  applyDayNightMode(weather);
+  
+  // Fireworks mạnh hơn ban đêm
+  const baseIntensity = isDaytime ? 0.4 : 0.8;
+  effects.start(baseIntensity);
+}
+
+function applyDayNightMode(weather) {
+  // Kiểm tra admin override
+  const savedMode = localStorage.getItem('minhhoang_daynight_mode');
+  
+  if (savedMode === 'day') {
+    isDaytime = true;
+  } else if (savedMode === 'night') {
+    isDaytime = false;
+  } else {
+    // Auto mode: dùng weather API hoặc fallback theo giờ
+    isDaytime = weather?.effects?.isDaytime ?? 
+      (new Date().getHours() >= 6 && new Date().getHours() < 18);
+  }
+  
+  // Apply CSS classes
+  document.body.classList.remove('newyear-day', 'newyear-night');
+  document.body.classList.add(isDaytime ? 'newyear-day' : 'newyear-night');
+  
+  console.log(`[New Year] Mode: ${isDaytime ? 'Day ☀️' : 'Night 🌙'}`);
+}
+
+async function applyDecorations() {
+  decorations.applyAll();
+}
+
+async function destroy() {
+  effects.stop();
+  decorations.removeAll();
+  document.body.classList.remove('newyear-day', 'newyear-night');
+  document.getElementById('newyear-theme-styles')?.remove();
+  isInitialized = false;
+}
+
+export default { ...CONFIG, init, applyEffects, applyDecorations, updateWeather, destroy };
+```
+
+### Bước 4: effects.js - Fireworks & Confetti
+
+```javascript
+const COLORS = ['#ffd700', '#ff6b6b', '#a855f7', '#3b82f6', '#22c55e', '#ff69b4', '#f97316'];
+
+let container = null;
+let isRunning = false;
+let animationFrame = null;
+
+function createFirework(x, y) {
+  const particles = [];
+  const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+  
+  for (let i = 0; i < 30; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'firework-particle';
+    particle.style.cssText = `
+      position: fixed;
+      left: ${x}px;
+      top: ${y}px;
+      width: 6px;
+      height: 6px;
+      background: ${color};
+      border-radius: 50%;
+      box-shadow: 0 0 10px ${color};
+      pointer-events: none;
+    `;
+    
+    const angle = (i / 30) * Math.PI * 2;
+    const velocity = 3 + Math.random() * 4;
+    const vx = Math.cos(angle) * velocity;
+    const vy = Math.sin(angle) * velocity;
+    
+    particles.push({ el: particle, x, y, vx, vy, life: 1 });
+    container.appendChild(particle);
+  }
+  
+  animateParticles(particles);
+}
+
+function animateParticles(particles) {
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.1; // gravity
+    p.life -= 0.02;
+    
+    p.el.style.left = p.x + 'px';
+    p.el.style.top = p.y + 'px';
+    p.el.style.opacity = p.life;
+    
+    if (p.life <= 0) p.el.remove();
+  });
+  
+  if (particles.some(p => p.life > 0)) {
+    requestAnimationFrame(() => animateParticles(particles));
+  }
+}
+
+export function start(intensity = 0.5) {
+  if (isRunning) return;
+  
+  container = document.createElement('div');
+  container.className = 'newyear-effects-container';
+  container.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(container);
+  
+  // Random fireworks
+  const interval = 2000 - intensity * 1500; // 500ms - 2000ms
+  setInterval(() => {
+    if (isRunning) {
+      const x = Math.random() * window.innerWidth;
+      const y = Math.random() * window.innerHeight * 0.6;
+      createFirework(x, y);
+    }
+  }, interval);
+  
+  isRunning = true;
+}
+
+export function stop() {
+  isRunning = false;
+  container?.remove();
+  container = null;
+}
+
+export default { start, stop, updateIntensity: () => {}, isActive: () => isRunning };
+```
+
+### Bước 5: CSS newyear.css (highlights)
+
+```css
+:root {
+  --newyear-gold: #ffd700;
+  --newyear-purple: #9b59b6;
+}
+
+/* Day Mode - Festive & Bright ☀️ */
+body.theme-newyear.newyear-day {
+  --color-bg: #faf8f5;
+  color: #1f2937;
+  background: linear-gradient(180deg, #fff8e1 0%, #ffe0b2 10%, #faf8f5 40%);
+}
+
+body.theme-newyear.newyear-day .site-header {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* Night Mode - Magical & Sparkly 🌙 */
+body.theme-newyear.newyear-night {
+  --color-bg: #0d0d1a;
+  color: #e6e6e6;
+  background: linear-gradient(180deg, #050510 0%, #0d0d1a 20%, #1a1a2e 50%);
+}
+
+body.theme-newyear.newyear-night .site-header {
+  background: rgba(13, 13, 26, 0.95);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+}
+
+/* Night text colors - dễ đọc */
+body.theme-newyear.newyear-night .profile-card__body p { color: #b8c5d9; }
+body.theme-newyear.newyear-night .eyebrow { color: var(--newyear-gold); }
+body.theme-newyear.newyear-night input { background: rgba(26, 26, 46, 0.9); color: #e6e6e6; }
+
+/* Effects */
+.newyear-effects-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.firework-particle {
+  will-change: transform, opacity;
+}
+```
+
+---
+
+## 13. Ví Dụ: Lunar New Year Theme (Tết Nguyên Đán) 🧧
+
+Theme Tết Nguyên Đán với các yếu tố văn hóa Việt Nam: múa lân, hoa đào, pháo hoa.
+
+### Đặc điểm nổi bật
+
+- **Múa lân (Lion dance)**: SVG mũ lân trên ảnh profile
+- **Hoa đào (Peach blossoms)**: Trang trí góc màn hình + cánh hoa bay
+- **Bao lì xì**: Lucky envelope decoration
+- **Pháo hoa**: Bắn từ dưới lên (khác với theme New Year)
+- **Day/Night mode**: Hỗ trợ đầy đủ
+
+### Cấu trúc files
+
+```
+themes/lunarnewyear/
+├── index.js          # Theme chính với day/night support
+├── decorations.js    # Múa lân, hoa đào, lì xì, cánh hoa bay
+└── effects.js        # Pháo hoa rocket physics
+
+styles/seasonal/
+└── lunarnewyear.css  # CSS với day/night modes
+```
+
+### date-detector.js
+
+```javascript
+lunarnewyear: {
+  id: 'lunarnewyear',
+  name: 'Tết Nguyên Đán',
+  priority: 100,  // Highest priority
+  getDateRange: (year) => {
+    // Lunar calendar lookup table
+    const lunarNewYearDates = {
+      2024: new Date(2024, 1, 10),  // Feb 10, 2024
+      2025: new Date(2025, 0, 29),  // Jan 29, 2025
+      2026: new Date(2026, 1, 17),  // Feb 17, 2026
+      // ...
+    };
+    const baseDate = lunarNewYearDates[year];
+    return {
+      start: new Date(baseDate.getTime() - 5 * 24 * 60 * 60 * 1000), // 5 ngày trước
+      end: new Date(baseDate.getTime() + 10 * 24 * 60 * 60 * 1000)   // 10 ngày sau
+    };
+  }
+}
+```
+
+### Pháo hoa từ dưới lên (effects.js)
+
+```javascript
+// Rocket physics - shoots from bottom
+function createRocket() {
+  const rocket = {
+    x: Math.random() * canvas.width,
+    y: canvas.height + 10,  // Start below screen
+    targetY: canvas.height * (0.2 + Math.random() * 0.3),  // Explode at 20-50% height
+    vx: (Math.random() - 0.5) * 2,
+    vy: -(8 + Math.random() * 4),  // Shoot upward
+    trail: [],
+    color: getRandomColor()
+  };
+  rockets.push(rocket);
+}
+
+function updateRocket(rocket) {
+  // Apply gravity to slow down
+  rocket.vy += 0.15;
+  rocket.x += rocket.vx;
+  rocket.y += rocket.vy;
+  
+  // Add trail
+  rocket.trail.push({ x: rocket.x, y: rocket.y });
+  if (rocket.trail.length > 8) rocket.trail.shift();
+  
+  // Explode when reaching target
+  if (rocket.y <= rocket.targetY) {
+    createExplosion(rocket.x, rocket.y, rocket.color);
+    return false;  // Remove rocket
+  }
+  return true;
+}
+
+function createExplosion(x, y, color) {
+  const particleCount = 40;
+  for (let i = 0; i < particleCount; i++) {
+    const angle = (Math.PI * 2 * i) / particleCount;
+    const speed = 3 + Math.random() * 3;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      color,
+      life: 1.0
+    });
+  }
+}
+```
+
+### Day/Night Mode Colors
+
+```css
+/* Day Mode - Warm and festive */
+body.seasonal-theme-lunarnewyear.seasonal-day {
+  --lunar-bg-primary: #fff5f5;
+  --lunar-accent: #c41e3a;
+  --lunar-gold: #ffd700;
+}
+
+/* Night Mode - Rich and glowing */
+body.seasonal-theme-lunarnewyear.seasonal-night {
+  --lunar-bg-primary: #1a0a0a;
+  --lunar-accent: #ff4444;
+  --lunar-gold: #ffcc00;
+  --lunar-glow: 0 0 20px rgba(255, 68, 68, 0.5);
+}
+```
+
+### Color Palette
+
+| Màu | Hex | Ý nghĩa |
+|-----|-----|---------|
+| Đỏ (Red) | `#FF0000`, `#c41e3a` | May mắn, thịnh vượng |
+| Vàng (Gold) | `#FFD700`, `#ffd700` | Tài lộc, giàu sang |
+| Hồng đào (Pink) | `#FFB7C5` | Hoa đào, mùa xuân |
+| Cam (Orange) | `#FF6347` | Năng lượng, nhiệt huyết |
+
+---
+
+## 14. Ví Dụ: Valentine Theme
 
 ### Bước 1: Thêm vào date-detector.js
 
@@ -1167,7 +1848,7 @@ function registerThemes() {
 
 ---
 
-## 11. Troubleshooting
+## 15. Troubleshooting
 
 ### Theme không được apply
 
@@ -1224,10 +1905,46 @@ function registerThemes() {
    async function destroy() {
      effects.stop();           // Stop animations
      decorations.removeAll();  // Remove DOM elements
+     // Remove day/night classes
+     document.body.classList.remove('yourTheme-day', 'yourTheme-night');
      // Remove CSS
      document.getElementById('your-styles')?.remove();
    }
    ```
+
+### Day/Night không hoạt động
+
+1. **Kiểm tra CSS classes đúng tên**
+   ```css
+   /* Phải dùng đúng format: theme-[id].[id]-day/night */
+   body.theme-newyear.newyear-day { ... }
+   body.theme-newyear.newyear-night { ... }
+   ```
+
+2. **Kiểm tra localStorage key**
+   ```javascript
+   // Key phải đúng
+   localStorage.getItem('minhhoang_daynight_mode'); // 'day', 'night', hoặc null
+   ```
+
+3. **Kiểm tra applyDayNightMode được gọi**
+   ```javascript
+   async function applyEffects(weather) {
+     applyDayNightMode(weather);  // PHẢI gọi function này
+     effects.start(intensity);
+   }
+   ```
+
+### Text khó đọc trong Night Mode
+
+Thêm CSS cho text colors trong night mode:
+```css
+body.theme-yourTheme.yourTheme-night .profile-card__body p { color: #b8c5d9; }
+body.theme-yourTheme.yourTheme-night .project-card__title { color: #f0f0f0; }
+body.theme-yourTheme.yourTheme-night .eyebrow { color: var(--your-accent); }
+body.theme-yourTheme.yourTheme-night input { color: #e6e6e6; }
+body.theme-yourTheme.yourTheme-night .badge--get { color: #5dade2; }
+```
 
 ---
 
@@ -1236,11 +1953,15 @@ function registerThemes() {
 - [ ] Thêm event vào `date-detector.js` với đúng format
 - [ ] Tạo folder `themes/yourTheme/` với 3 files
 - [ ] Implement tất cả required methods trong `index.js`
+- [ ] **Implement `applyDayNightMode()` function**
 - [ ] Tạo CSS file trong `styles/seasonal/`
+- [ ] **Tạo Day Mode CSS với màu sáng**
+- [ ] **Tạo Night Mode CSS với màu tối + text colors dễ đọc**
 - [ ] Đăng ký theme trong `seasonal/index.js`
+- [ ] **Thêm icon vào `admin-dashboard.js` getThemeIcon()**
 - [ ] Test với các screen sizes khác nhau
 - [ ] Test với `prefers-reduced-motion`
-- [ ] Verify cleanup hoạt động đúng
+- [ ] Verify cleanup hoạt động đúng (bao gồm day/night classes)
 - [ ] Check accessibility (aria-hidden)
 - [ ] Test print styles
 
@@ -1251,14 +1972,27 @@ function registerThemes() {
 Hệ thống Seasonal Theme được thiết kế modular và dễ mở rộng. Mỗi theme hoạt động độc lập và có thể:
 
 - Respond to weather data
+- **Tự động chuyển Day/Night mode theo thời tiết hoặc giờ**
+- **Admin có thể override Day/Night từ dashboard**
 - Có hiệu ứng particles riêng
 - Có decorations riêng
 - Tự động cleanup khi chuyển theme
 
-Nếu có thắc mắc, hãy xem implementation của Christmas theme làm reference tại:
-- `public/scripts/modules/seasonal/themes/christmas/`
-- `public/styles/seasonal/christmas.css`
+### Themes Đã Implement
+
+| Theme | Icon | Day/Night | Status |
+|-------|------|-----------|--------|
+| Christmas 🎄 | ✅ | ✅ | Production |
+| New Year 🎆 | ✅ | ✅ | Production |
+| Tết 🧧 | ✅ | ❌ | Planned |
+| Valentine 💕 | ✅ | ❌ | Planned |
+
+Nếu có thắc mắc, hãy xem implementation của themes làm reference tại:
+- `public/scripts/modules/seasonal/themes/christmas/` - Christmas theme
+- `public/scripts/modules/seasonal/themes/newyear/` - New Year theme
+- `public/styles/seasonal/christmas.css` - Christmas CSS với Day/Night
+- `public/styles/seasonal/newyear.css` - New Year CSS với Day/Night
 
 ---
 
-*Tài liệu được cập nhật: December 2025*
+*Tài liệu được cập nhật: December 27, 2025*
