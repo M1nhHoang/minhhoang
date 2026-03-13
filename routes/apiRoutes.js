@@ -4,6 +4,7 @@ const userRoutes = require('./userRoutes');
 const authRoutes = require('./authRoutes');
 const weatherRoutes = require('./weatherRoutes');
 const settingRoutes = require('./settingRoutes');
+const gomokuRoutes = require('./gomokuRoutes');
 
 router.get('/health', (req, res) => {
   res.json({ status: 'ok', uptime: process.uptime() });
@@ -13,5 +14,6 @@ router.use('/users', userRoutes);
 router.use('/auth', authRoutes);
 router.use('/weather', weatherRoutes);
 router.use('/settings', settingRoutes);
+router.use('/games/gomoku', gomokuRoutes);
 
 module.exports = router;

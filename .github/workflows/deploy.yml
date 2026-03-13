@@ -110,6 +110,9 @@ jobs:
 
           rm -rf "$STAGING" "$ARCHIVE"
 
+          # Make engine binary executable
+          chmod +x "$TARGET/gomocup_engine/engine/pbrain-rapfi-linux-clang-avx512" 2>/dev/null || true
+
           if [ -n "$NODE_VENV" ] && [ -f "$NODE_VENV" ]; then
             # Activate the cPanel-provided Node environment so npm uses the managed runtime
             set +u
