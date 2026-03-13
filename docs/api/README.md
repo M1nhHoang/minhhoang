@@ -12,6 +12,7 @@ Base URL: `/api`
 | [Weather](weather.md) | `/api/weather` | `weatherRoutes.js` |
 | [Settings](settings.md) | `/api/settings` | `settingRoutes.js` |
 | [Gomoku](gomoku.md) | `/api/games/gomoku` | `gomokuRoutes.js` |
+| [Chess](chess.md) | `/api/games/chess` | `chessRoutes.js` |
 
 ## Common Notes
 
