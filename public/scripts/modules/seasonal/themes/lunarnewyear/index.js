@@ -69,7 +69,8 @@ async function loadStyles() {
   const link = document.createElement('link');
   link.id = styleId;
   link.rel = 'stylesheet';
-  link.href = `/styles/seasonal/lunarnewyear.css`;
+  // Add version param for cache busting (see docs/asset-versioning.md)
+  link.href = `/styles/seasonal/lunarnewyear.css?v=${Date.now()}`;
   
   return new Promise((resolve, reject) => {
     link.onload = resolve;

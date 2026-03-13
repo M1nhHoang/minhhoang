@@ -20,7 +20,7 @@ async function initializeDefaultAdmin() {
         username: adminUsername,
         password: adminPassword,
         type: 'admin',
-        role: USER_ROLES.SUPER_ADMIN,
+        role: USER_ROLES.ADMIN,
         status: 'offline',
         isVerified: true,
         description: 'System Super Administrator',
