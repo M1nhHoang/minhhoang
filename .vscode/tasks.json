@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Move engine folders",
+			"type": "shell",
+			"command": "Move-Item -Path 'gomocup_engine' -Destination 'engine\\gomocup_engine' -Force; Move-Item -Path 'stockfish_engine' -Destination 'engine\\stockfish_engine' -Force; Write-Host 'Done! Folders moved into engine/'"
+		},
+		{
+			"label": "Merge engine into engines",
+			"type": "shell",
+			"command": "Move-Item -Path 'engine\\gomocup_engine' -Destination 'engines\\gomoku\\gomocup_engine' -Force; Move-Item -Path 'engine\\stockfish_engine' -Destination 'engines\\chess\\stockfish_engine' -Force; Remove-Item -Path 'engine' -Recurse -Force -ErrorAction SilentlyContinue; Write-Host 'Done'"
+		}
+	]
+}

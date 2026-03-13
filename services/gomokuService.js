@@ -1,7 +1,7 @@
 'use strict';
 
 const { gomokuEngine } = require('../engines/gomoku/gomokuEngine');
-const { Rule, Player } = require('../gomocup_engine/nodejs/src/gomocup-engine');
+const { Rule, Player } = require('../engines/gomoku/gomocup_engine/nodejs/src/gomocup-engine');
 
 const VALID_RULES = [Rule.FREESTYLE, Rule.STANDARD, Rule.FREE_RENJU];
 const VALID_PLAYERS = [Player.OWN, Player.OPPONENT, Player.OWN_SWAP];

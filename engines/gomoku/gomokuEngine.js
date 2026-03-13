@@ -2,11 +2,11 @@
 
 const path = require('path');
 const logger = require('../../config/logger');
-const { GomocupEngine, Rule } = require('../../gomocup_engine/nodejs/src/gomocup-engine');
+const { GomocupEngine, Rule } = require('./gomocup_engine/nodejs/src/gomocup-engine');
 
 // Engine binary - AVX-512 build for Linux x86_64
-const ENGINE_PATH = path.join(__dirname, '..', '..', 'gomocup_engine', 'engine', 'pbrain-rapfi-linux-clang-avx512');
-const ENGINE_DIR = path.join(__dirname, '..', '..', 'gomocup_engine', 'engine');
+const ENGINE_PATH = path.join(__dirname, 'gomocup_engine', 'engine', 'pbrain-rapfi-linux-clang-avx512');
+const ENGINE_DIR = path.join(__dirname, 'gomocup_engine', 'engine');
 
 const MAX_DEPTH = 15;
 const DEFAULT_DEPTH = 10;

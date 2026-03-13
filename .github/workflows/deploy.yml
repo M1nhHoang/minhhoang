@@ -111,8 +111,26 @@ jobs:
           rm -rf "$STAGING" "$ARCHIVE"
 
           # Make engine binaries executable
-          chmod +x "$TARGET/gomocup_engine/engine/pbrain-rapfi-linux-clang-avx512" 2>/dev/null || true
-          chmod +x "$TARGET/stockfish_engine/engine/stockfish-ubuntu-x86-64" 2>/dev/null || true
+          GOMOKU_BIN="$TARGET/engines/gomoku/gomocup_engine/engine/pbrain-rapfi-linux-clang-avx512"
+          CHESS_BIN="$TARGET/engines/chess/stockfish_engine/engine/stockfish-ubuntu-x86-64"
+          chmod +x "$GOMOKU_BIN" 2>/dev/null || true
+          chmod +x "$CHESS_BIN" 2>/dev/null || true
+
+          # Diagnose engine binaries
+          echo "=== Engine binary diagnostics ==="
+          for BIN_LABEL_PATH in "Gomoku:$GOMOKU_BIN" "Chess:$CHESS_BIN"; do
+            LABEL="${BIN_LABEL_PATH%%:*}"
+            BIN="${BIN_LABEL_PATH#*:}"
+            echo "--- $LABEL engine ---"
+            if [ ! -f "$BIN" ]; then
+              echo "  ERROR: binary not found at $BIN"
+              continue
+            fi
+            echo "  File: $(file "$BIN" 2>&1)"
+            echo "  Size: $(stat -c%s "$BIN" 2>/dev/null || echo 'unknown') bytes"
+            echo "  Libs: $(ldd "$BIN" 2>&1 | head -20)"
+          done
+          echo "=== End diagnostics ==="
 
           if [ -n "$NODE_VENV" ] && [ -f "$NODE_VENV" ]; then
             # Activate the cPanel-provided Node environment so npm uses the managed runtime

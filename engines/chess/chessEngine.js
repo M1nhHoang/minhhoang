@@ -2,11 +2,11 @@
 
 const path = require('path');
 const logger = require('../../config/logger');
-const { UciEngine } = require('../../stockfish_engine/nodejs/src/uci-engine');
+const { UciEngine } = require('./stockfish_engine/nodejs/src/uci-engine');
 
 // Engine binary - x86-64 SSE2 build for Linux
-const ENGINE_PATH = path.join(__dirname, '..', '..', 'stockfish_engine', 'engine', 'stockfish-ubuntu-x86-64');
-const ENGINE_DIR = path.join(__dirname, '..', '..', 'stockfish_engine', 'engine');
+const ENGINE_PATH = path.join(__dirname, 'stockfish_engine', 'engine', 'stockfish-ubuntu-x86-64');
+const ENGINE_DIR = path.join(__dirname, 'stockfish_engine', 'engine');
 
 const MAX_DEPTH = 15;
 const DEFAULT_DEPTH = 12;
@@ -194,7 +194,13 @@ class ChessEngineManager {
     logger.info('[chess] Starting engine...');
     this._engine = new UciEngine(ENGINE_PATH, ENGINE_DIR);
 
-    await this._engine.start();
+    try {
+      await this._engine.start();
+    } catch (err) {
+      this._engine = null;
+      throw new EngineComputeError('Failed to start chess engine: ' + err.message);
+    }
+
     this._engine.configure({
       Threads: ENGINE_THREADS,
       Hash: ENGINE_HASH_MB,

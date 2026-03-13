@@ -1,21 +1,21 @@
 # Chess AI Engine
 
-API chơi cờ vua với engine AI Stockfish — engine cờ vua mã nguồn mở mạnh nhất thế giới.
+Chess API powered by Stockfish — the world's strongest open-source chess engine.
 
 > Engine: [Stockfish](https://stockfishchess.org/) — UCI protocol  
-> Stateless: mỗi request gửi trạng thái bàn cờ (FEN hoặc moves), server không lưu game state
+> Stateless: each request sends the board state (FEN or moves), the server does not persist game state
 
 ---
 
 ## `POST /api/games/chess/move`
 
-Gửi trạng thái bàn cờ, nhận nước đi tốt nhất của AI.
+Send a board position, receive the best move from the AI.
 
-**Auth:** Không yêu cầu
+**Auth:** Not required
 
 ### Request Body
 
-**Cách 1 — FEN string** (khuyến nghị, linh hoạt nhất):
+**Option 1 — FEN string** (recommended, most flexible):
 
 ```json
 {
@@ -26,7 +26,7 @@ Gửi trạng thái bàn cờ, nhận nước đi tốt nhất của AI.
 }
 ```
 
-**Cách 2 — Moves list** (từ vị trí ban đầu):
+**Option 2 — Moves list** (from the starting position):
 
 ```json
 {
@@ -35,69 +35,69 @@ Gửi trạng thái bàn cờ, nhận nước đi tốt nhất của AI.
 }
 ```
 
-**Cả hai không truyền** → engine tính nước đầu tiên từ vị trí ban đầu.
+**Neither provided** → engine computes the first move from the starting position.
 
-> Nếu cả `fen` và `moves` đều có, `fen` được ưu tiên.
+> If both `fen` and `moves` are provided, `fen` takes priority.
 
-### Tham số
+### Parameters
 
-| Field | Type | Required | Default | Mô tả |
-|-------|------|----------|---------|--------|
-| `fen` | string | Không | — | Trạng thái bàn cờ dạng [FEN](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation) |
-| `moves` | string[] | Không | `[]` | Danh sách nước đi UCI từ vị trí ban đầu |
-| `depth` | number | Không | `12` | Độ sâu tìm kiếm. Phạm vi: `1` – `15` |
-| `multiPV` | number | Không | `1` | Số nước tốt nhất trả về. Phạm vi: `1` – `3` |
-| `skillLevel` | number | Không | `20` | Trình độ AI. Phạm vi: `0` (yếu nhất) – `20` (mạnh nhất) |
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `fen` | string | No | — | Board state in [FEN](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation) format |
+| `moves` | string[] | No | `[]` | List of UCI moves from the starting position |
+| `depth` | number | No | `12` | Search depth. Range: `1` – `15` |
+| `multiPV` | number | No | `1` | Number of best moves to return. Range: `1` – `3` |
+| `skillLevel` | number | No | `20` | AI strength. Range: `0` (weakest) – `20` (strongest) |
 
-### FEN string
+### FEN String
 
-FEN (Forsyth–Edwards Notation) mô tả đầy đủ trạng thái bàn cờ trong 1 chuỗi:
+FEN (Forsyth–Edwards Notation) fully describes a board state in a single string:
 
 ```
 rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1
 │                                                │  │    │  │ │
-│                                                │  │    │  │ └─ Số nước đầy đủ
-│                                                │  │    │  └─── Số nước nửa không ăn/đi tốt
-│                                                │  │    └────── Ô en passant
-│                                                │  └─────────── Quyền nhập thành
-│                                                └────────────── Lượt đi (w=trắng, b=đen)
-└──────────────────────────────────────────────────────────────── Vị trí quân (hàng 8→1)
+│                                                │  │    │  │ └─ Fullmove number
+│                                                │  │    │  └─── Halfmove clock
+│                                                │  │    └────── En passant square
+│                                                │  └─────────── Castling rights
+│                                                └────────────── Side to move (w=white, b=black)
+└──────────────────────────────────────────────────────────────── Piece placement (rank 8→1)
 ```
 
-Vị trí ban đầu: `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1`
+Starting position: `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1`
 
-### Moves — Ký hiệu UCI
+### Moves — UCI Notation
 
-Nước đi dạng `<ô_đi><ô_đến>[quân_phong]`:
+Move format: `<from><to>[promotion]`:
 
-| Ví dụ | Mô tả |
-|-------|--------|
-| `e2e4` | Tốt e2 đi e4 |
-| `g1f3` | Mã g1 đi f3 |
-| `e1g1` | Nhập thành cánh vua (Trắng) |
-| `e1c1` | Nhập thành cánh hậu (Trắng) |
-| `e7e8q` | Tốt phong cấp thành Hậu |
-| `e7e8r` | Tốt phong cấp thành Xe |
+| Example | Description |
+|---------|-------------|
+| `e2e4` | Pawn e2 to e4 |
+| `g1f3` | Knight g1 to f3 |
+| `e1g1` | Kingside castling (White) |
+| `e1c1` | Queenside castling (White) |
+| `e7e8q` | Pawn promotes to Queen |
+| `e7e8r` | Pawn promotes to Rook |
 
-Quân phong cấp: `q` (hậu), `r` (xe), `b` (tượng), `n` (mã)
+Promotion pieces: `q` (queen), `r` (rook), `b` (bishop), `n` (knight)
 
-### `skillLevel` — Điều chỉnh độ khó
+### `skillLevel` — Difficulty Adjustment
 
-| Giá trị | Trình độ ước tính |
-|---------|-------------------|
-| `0` | Người mới (~1100 Elo) |
-| `5` | Nghiệp dư (~1500 Elo) |
-| `10` | Trung bình (~1900 Elo) |
-| `15` | Khá (~2200 Elo) |
-| `20` | Sức mạnh tối đa (~3200+ Elo) |
+| Value | Estimated Strength |
+|-------|-------------------|
+| `0` | Beginner (~1100 Elo) |
+| `5` | Amateur (~1500 Elo) |
+| `10` | Intermediate (~1900 Elo) |
+| `15` | Advanced (~2200 Elo) |
+| `20` | Maximum strength (~3200+ Elo) |
 
-### `multiPV` — Nhiều nước ứng viên
+### `multiPV` — Multiple Candidate Moves
 
-- `1` — Chỉ trả `bestmove` (nhanh nhất)
-- `2` — Trả top 2 nước tốt nhất (chậm hơn ~2x)
-- `3` — Trả top 3 nước tốt nhất (chậm hơn ~3x)
+- `1` — Returns only `bestmove` (fastest)
+- `2` — Returns top 2 best moves (~2x slower)
+- `3` — Returns top 3 best moves (~3x slower)
 
-### Response thành công `200`
+### Success Response `200`
 
 **multiPV = 1:**
 
@@ -129,43 +129,43 @@ Quân phong cấp: `q` (hậu), `r` (xe), `b` (tượng), `n` (mã)
 }
 ```
 
-### Response fields
+### Response Fields
 
-| Field | Type | Mô tả |
-|-------|------|--------|
-| `bestmove` | string | Nước đi tốt nhất (UCI notation) |
-| `ponder` | string\|null | Nước engine dự đoán đối thủ sẽ đi tiếp |
-| `evaluation` | object\|null | Đánh giá thế cờ |
-| `evaluation.type` | string | `"cp"` (centipawn) hoặc `"mate"` (chiếu hết) |
-| `evaluation.value` | number | Giá trị: cp dương = trắng lợi, âm = đen lợi. mate dương = trắng thắng trong N nước |
-| `lines` | array\|null | Danh sách nước ứng viên (chỉ khi `multiPV > 1`) |
-| `lines[].rank` | number | Thứ hạng (1 = tốt nhất) |
-| `lines[].move` | string | Nước đi |
-| `lines[].score` | object | Đánh giá riêng của nước này |
-| `lines[].pv` | string[] | Principal variation — chuỗi nước đi tối ưu |
-| `engineTime` | number | Thời gian AI suy nghĩ (ms) |
+| Field | Type | Description |
+|-------|------|-------------|
+| `bestmove` | string | Best move (UCI notation) |
+| `ponder` | string\|null | Move the engine predicts the opponent will play next |
+| `evaluation` | object\|null | Position evaluation |
+| `evaluation.type` | string | `"cp"` (centipawn) or `"mate"` (checkmate) |
+| `evaluation.value` | number | Positive cp = White advantage, negative = Black advantage. Positive mate = White mates in N moves |
+| `lines` | array\|null | Candidate move list (only when `multiPV > 1`) |
+| `lines[].rank` | number | Rank (1 = best) |
+| `lines[].move` | string | Move |
+| `lines[].score` | object | Individual evaluation for this move |
+| `lines[].pv` | string[] | Principal variation — optimal move sequence |
+| `engineTime` | number | AI thinking time (ms) |
 
-### Evaluation giải thích
+### Evaluation Explained
 
-| Ví dụ | Nghĩa |
-|-------|--------|
-| `{ "type": "cp", "value": 100 }` | Trắng hơn 1 quân tốt (100 centipawn = 1 pawn) |
-| `{ "type": "cp", "value": -250 }` | Đen hơn 2.5 quân tốt |
-| `{ "type": "mate", "value": 3 }` | Trắng chiếu hết trong 3 nước |
-| `{ "type": "mate", "value": -1 }` | Đen chiếu hết trong 1 nước |
+| Example | Meaning |
+|---------|---------|
+| `{ "type": "cp", "value": 100 }` | White is up 1 pawn (100 centipawns = 1 pawn) |
+| `{ "type": "cp", "value": -250 }` | Black is up 2.5 pawns |
+| `{ "type": "mate", "value": 3 }` | White checkmates in 3 moves |
+| `{ "type": "mate", "value": -1 }` | Black checkmates in 1 move |
 
 ### Errors
 
-| Status | Khi nào |
-|--------|---------|
-| `400` | Input không hợp lệ (FEN sai format, moves sai UCI notation) |
-| `408` | Request chờ quá 30 giây trong queue |
-| `429` | IP này đã có 5 request đang chờ xử lý |
-| `500` | Engine lỗi hoặc không còn nước hợp lệ (game over) |
+| Status | When |
+|--------|------|
+| `400` | Invalid input (bad FEN format, invalid UCI moves) |
+| `408` | Request waited more than 30 seconds in queue |
+| `429` | This IP already has 5 pending requests |
+| `500` | Engine error or no legal moves (game over) |
 
-### Ví dụ sử dụng
+### Usage Examples
 
-**Nước đầu tiên (Trắng):**
+**First move (White):**
 
 ```bash
 curl -X POST /api/games/chess/move \
@@ -173,7 +173,7 @@ curl -X POST /api/games/chess/move \
   -d '{"depth": 12}'
 ```
 
-**Từ FEN với top 3 gợi ý:**
+**From FEN with top 3 suggestions:**
 
 ```bash
 curl -X POST /api/games/chess/move \
@@ -185,7 +185,7 @@ curl -X POST /api/games/chess/move \
   }'
 ```
 
-**Từ moves list, AI yếu:**
+**From moves list, weak AI:**
 
 ```bash
 curl -X POST /api/games/chess/move \
@@ -201,9 +201,9 @@ curl -X POST /api/games/chess/move \
 
 ## `GET /api/games/chess/info`
 
-Kiểm tra trạng thái engine.
+Check engine status.
 
-**Auth:** Không yêu cầu
+**Auth:** Not required
 
 ### Response `200`
 
@@ -212,24 +212,24 @@ Kiểm tra trạng thái engine.
   "success": true,
   "data": {
     "running": true,
-    "name": "Stockfish 15.1",
+    "name": "Stockfish 11",
     "author": "T. Romstad, M. Costalba, J. Kiiski, G. Linscott"
   }
 }
 ```
 
-| Field | Type | Mô tả |
-|-------|------|--------|
-| `data.running` | boolean | Engine process có đang chạy không |
-| `data.name` | string\|null | Tên engine (null nếu chưa chạy) |
-| `data.author` | string\|null | Tác giả (null nếu chưa chạy) |
+| Field | Type | Description |
+|-------|------|-------------|
+| `data.running` | boolean | Whether the engine process is currently running |
+| `data.name` | string\|null | Engine name (null if not started) |
+| `data.author` | string\|null | Author (null if not started) |
 
 ---
 
 ## Rate Limiting
 
-- Mỗi IP tối đa **5 request** đang pending trong queue
-- Request chờ quá **30 giây** sẽ tự timeout (`408`)
-- Engine tự tắt sau **60 giây** không có request (tiết kiệm tài nguyên)
-- Engine chỉ chạy **1 process** — các request xếp hàng xử lý tuần tự
-- Cấu hình cố định: `Threads: 1`, `Hash: 64MB` (phù hợp shared hosting)
+- Max **5 pending requests** per IP in the queue
+- Requests waiting more than **30 seconds** auto-timeout (`408`)
+- Engine auto-shuts down after **60 seconds** of inactivity (saves resources)
+- Engine runs as a **single process** — requests are queued and processed sequentially
+- Fixed configuration: `Threads: 1`, `Hash: 64MB` (suitable for shared hosting)

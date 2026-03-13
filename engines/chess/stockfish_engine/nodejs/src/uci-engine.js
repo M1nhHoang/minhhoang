@@ -83,6 +83,11 @@ class UciEngine extends EventEmitter {
     this._rl = readline.createInterface({ input: this._proc.stdout });
     this._rl.on('line', (line) => this._onLine(line));
 
+    // Prevent EPIPE from crashing the process if engine dies immediately
+    this._proc.stdin.on('error', () => {
+      this._running = false;
+    });
+
     this._proc.stderr.on('data', (data) => {
       if (this._debugCallback) {
         this._debugCallback(`[stderr] ${data.toString().trim()}`);
@@ -98,6 +103,13 @@ class UciEngine extends EventEmitter {
       this._running = false;
       this.emit('error', err);
     });
+
+    // Wait a tick to detect immediate process exit
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    if (!this._running) {
+      this._proc = null;
+      throw new EngineError('Engine process exited immediately — binary may not be executable or compatible');
+    }
 
     // UCI handshake
     this._send('uci');
